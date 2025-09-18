@@ -1,2 +1,6 @@
 
 je commence par RESSOURCE.cpp et .h
+
+J ai finis
+
+je fais RessourcePapier et RessourceDigitaleAV
