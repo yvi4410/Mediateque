@@ -1,8 +1,8 @@
 #pragma once
 #include <string>
+#include "Ressource.h"
 
-class RessourcePapier {
-    
+class RessourcePapier : public Ressource {
 protected:
     int annee;
     int nbPage;
@@ -10,6 +10,6 @@ protected:
     std::string resume;
 
 public:
-    RessourcePapier(int annee, int nbPage, std::string collection, std::string resume);
-
+    RessourcePapier(int id, std::string titre, std::string auteur, std::string etat,
+                    int annee, int nbPage, std::string collection, std::string resume);
 };
