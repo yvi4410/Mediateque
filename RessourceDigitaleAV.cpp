@@ -1,3 +1,4 @@
 #include "RessourceDigitaleAV.h"
 
-// Implémentation des méthodes de RessourceDigitaleAV (vide pour l'instant)
+RessourceDigitaleAV::RessourceDigitaleAV(int duree, std::string maisonProduction)
+	: duree(duree), maisonProduction(maisonProduction) {}
