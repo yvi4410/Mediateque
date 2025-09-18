@@ -3,4 +3,20 @@ project(untitled)
 
 set(CMAKE_CXX_STANDARD 20)
 
-add_executable(untitled main.cpp)
+add_executable(untitled main.cpp
+        VHS.cpp
+        Utilisateur.cpp
+        Administrateur.h
+        Administrateur.cpp
+        Client.h
+        Client.cpp
+        Application.cpp
+        CD.cpp
+        DVD.cpp
+        Livre.cpp
+        Mediatheque.cpp
+        Ressource.cpp
+        RessourceDigitaleAV.cpp
+        RessourceNumeriqueFichier.cpp
+        RessourcePapier.cpp
+        Revue.cpp)
