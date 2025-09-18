@@ -1,3 +1,5 @@
 #include "Ressource.h"
 
-// Implémentation des méthodes de Ressource (vide pour l'instant)
+Ressource::Ressource(int id, std::string titre, std::string auteur, std::string etat)
+                : id(id), titre(titre), auteur(auteur), etat(etat) {}
+
