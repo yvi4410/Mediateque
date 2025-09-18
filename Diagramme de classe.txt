@@ -1,0 +1,117 @@
+---
+config:
+  layout: elk
+  theme: neutral
+  look: neo
+---
+classDiagram
+direction TB
+    class Ressource {
+	    +id: int
+	    +titre: string
+	    +auteur: string
+	    +etat: string
+    }
+    class RessourcePapier {
+	    +annee: int
+	    +nbPages: int
+	    +collection: string
+	    +resume: string
+    }
+    class RessourceDigitaleAV {
+	    +duree: int
+	    +maisonProduction: string
+    }
+    class RessourceNumeriqueFichier {
+	    +type: string
+	    +taille: int
+	    +url: string
+    }
+    class Livre {
+    }
+    class Revue {
+	    +editeur: string
+	    +nbArticles: int
+	    +nomsArticles: string[]
+    }
+    class CD {
+	    +nbPistes: int
+    }
+    class VHS {
+    }
+    class DVD {
+	    +nbChapitres: int
+    }
+    class Utilisateur {
+        +id: int
+	    +prenom: string
+	    +nom: string
+	    +bye()
+	    +list()
+	    +show(id: int)
+	    +search(q: string)
+	    +clear()
+	    +add(type: string)
+	    +load(filename: string)
+	    +save(filename: string)
+	    +deleteById(id: int)
+	    +reset()
+    }
+    class Administrateur {
+	    +bye()
+	    +list()
+	    +show(id: int)
+	    +search(q: string)
+	    +clear()
+	    +add(type: string)
+	    +load(filename: string)
+	    +save(filename: string)
+	    +deleteById(id: int)
+	    +reset()
+    }
+    class Client {
+	    +bye()
+	    +list()
+	    +show(id: int)
+	    +search(q: string)
+	    +clear()
+    }
+    class Application {
+	    +run()
+	    +dispatch(cmd: string)
+    }
+    class Mediatheque {
+	    +add(type: string)
+	    +deleteById(id: int)
+	    +list()
+	    +show(id: int)
+	    +search(q: string)
+	    +clear()
+	    +load(filename: string)
+	    +save(filename: string)
+	    +reset()
+        +ajouterUtilisateur(u: Utilisateur)
+        +supprimerUtilisateur(id: int)
+        +listerUtilisateurs()
+    }
+	<<abstract>> Ressource
+	<<abstract>> RessourcePapier
+	<<abstract>> RessourceDigitaleAV
+	<<abstract>> Utilisateur
+    Ressource <|-- RessourcePapier
+    Ressource <|-- RessourceDigitaleAV
+    Ressource <|-- RessourceNumeriqueFichier
+    RessourcePapier <|-- Livre
+    RessourcePapier <|-- Revue
+    RessourceDigitaleAV <|-- CD
+    RessourceDigitaleAV <|-- VHS
+    RessourceDigitaleAV <|-- DVD
+    Utilisateur <|-- Administrateur
+    Utilisateur <|-- Client
+    Application --> Mediatheque : utilise
+    Application --> "0..1" Utilisateur : permet les actions de
+    Mediatheque *-- "0..*" Ressource : contient
+    Mediatheque *-- "0..*" Utilisateur : gère
+
+
+

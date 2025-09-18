@@ -1,0 +1,20 @@
+sequenceDiagram
+  actor Admin as Administrateur
+  participant App as Application
+  participant Med as Mediatheque
+  participant Repo as Catalogue
+
+  autonumber
+  Admin ->> App: dispatch("add CD {titre, auteur, duree, nbPistes, maisonProduction}")
+  App ->> Med: add(type="CD", meta)
+  alt type == "CD"
+    create participant RCD as CD
+    Med ->> RCD: new CD(titre, auteur, duree, nbPistes, maisonProduction, etat="disponible")
+    RCD -->> Med: instance
+    Med ->> Repo: ajouter(CD)
+    Repo -->> Med: ok
+    Med -->> App: ok (idCD)
+  else type inconnu
+    Med -->> App: erreur "Type non supporté"
+  end
+  App -->> Admin: "CD ajouté (id=idCD)" / message d'erreur
