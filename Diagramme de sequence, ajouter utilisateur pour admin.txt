@@ -1,0 +1,18 @@
+sequenceDiagram
+  actor Admin as Administrateur
+  participant App as Application
+  participant Med as Mediatheque
+
+  autonumber
+  Admin ->> App: dispatch("add CLIENT {prenom, nom}")
+  App ->> App: verifierRoleCourant() == ADMIN
+  alt rôle == ADMIN
+    create participant C as Client
+    App ->> C: new Client(prenom, nom)
+    C -->> App: instance
+    App ->> Med: ajouterUtilisateur(C)
+    Med -->> App: ok (idClient)
+    App -->> Admin: "Client ajouté (id=idClient)"
+  else rôle != ADMIN
+    App -->> Admin: erreur "Droits insuffisants"
+  end

@@ -1,0 +1,15 @@
+## Présentation du projet Médiathèque C++
+
+Le projet consiste à créer une application console en C++ pour gérer une médiathèque.
+
+Elle permet de gérer plusieurs types de ressources : livres, revues, CD, DVD, VHS, fichiers numériques.
+
+Les fonctionnalités principales sont : ajouter, supprimer, lister, afficher, rechercher, sauvegarder et charger des ressources.
+
+## L’application gère aussi plusieurs utilisateurs :
+
+Administrateur (accès complet).
+
+Client (consultation et recherche seulement).
+
+Le projet met en avant la modélisation UML et l’utilisation des concepts orientés objet en C++ (héritage, polymorphisme, etc.).
