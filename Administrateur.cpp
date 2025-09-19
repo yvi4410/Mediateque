@@ -322,8 +322,8 @@ void Administrateur::save(const std::string& filename) {
 }
 
     void Administrateur::clear() {
-        std::cout << "[Admin] Nettoyage des ressources" << std::endl;
-        // À compléter selon comment tu gères les ressources
+        resultats.clear();
+        std::cout << "[Admin] Résultats de recherche réinitialisés. Prochaine recherche appliquée sur toutes les ressources." << std::endl;
     }
 
     void Administrateur::deleteById(int id) {
