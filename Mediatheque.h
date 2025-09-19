@@ -3,11 +3,13 @@
 #include <vector>
 #include <memory>
 #include "Ressource.h"
+#include "Utilisateur.h"
 
 class Mediatheque {
 
 private:
     std::vector<std::unique_ptr<Ressource>> ressources;
+    std::vector<std::unique_ptr<Utilisateur>> utilisateurs;
 
 public:
     void dispatch();

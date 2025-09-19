@@ -4,9 +4,7 @@
     #include <vector>
     #include "Utilisateur.h"
 
-    namespace mediatheque {
-
-    class Administrateur {
+class Administrateur {
     public:
         Administrateur();
         ~Administrateur();
@@ -24,6 +22,4 @@
     protected:
         std::vector<Utilisateur> utilisateurs;
         // Ajoute ici d'autres attributs si nécessaire
-    };
-
-    }
+};

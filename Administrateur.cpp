@@ -3,7 +3,7 @@
 #include <algorithm> // pour std::remove_if
 #include <fstream>   // pour load/save si tu fais de la sérialisation simple
 
-namespace mediatheque {
+
 
     Administrateur::Administrateur() {
     }
@@ -70,4 +70,3 @@ namespace mediatheque {
         }
     }
 
-}

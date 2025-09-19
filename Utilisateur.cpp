@@ -1,8 +1,6 @@
 #include "Utilisateur.h"
 #include <iostream>
 
-namespace mediatheque {
-
 Utilisateur::Utilisateur(int id, const std::string& prenom, const std::string& nom)
     : id(id), prenom(prenom), nom(nom) {}
 
@@ -24,6 +22,4 @@ void Utilisateur::show(int id) {
 
 void Utilisateur::borrow(int id) {
     std::cout << "borrow(" << id << ")" << std::endl;
-}
-
 }
