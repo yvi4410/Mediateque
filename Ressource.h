@@ -11,6 +11,12 @@ protected:
 
 public:
     Ressource(int id, std::string titre, std::string auteur, std::string etat);
-    std::string getRessourceTitle() const { return titre; }
+
+    ~Ressource();
+
+    std::string getRessourceTitle() const;
+    int getId() const;
+    std::string getAuteur() const;
+    std::string getEtat() const;
 
 };
