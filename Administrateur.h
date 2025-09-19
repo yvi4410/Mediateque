@@ -1,8 +1,8 @@
-// Administrateur.h
-    #pragma once
-    #include <string>
-    #include <vector>
-    #include "Utilisateur.h"
+#pragma once
+#include <string>
+#include <vector>
+#include "Utilisateur.h"
+#include "Ressource.h"
 
 class Administrateur {
     public:
@@ -21,5 +21,6 @@ class Administrateur {
 
     protected:
         std::vector<Utilisateur> utilisateurs;
-        // Ajoute ici d'autres attributs si nécessaire
+        std::vector<Ressource*> ressources;
+        std::vector<Ressource*> resultats;
 };

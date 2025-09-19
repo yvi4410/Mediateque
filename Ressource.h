@@ -12,11 +12,12 @@ protected:
 public:
     Ressource(int id, std::string titre, std::string auteur, std::string etat);
 
-    ~Ressource();
+    virtual ~Ressource(); // ✅ Ajout du mot-clé “virtual”
 
-    std::string getRessourceTitle() const;
     int getId() const;
+    std::string getRessourceTitle() const;
     std::string getAuteur() const;
     std::string getEtat() const;
 
+    virtual std::string getType() const { return "Ressource"; }
 };
