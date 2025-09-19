@@ -32,6 +32,37 @@ void Utilisateur::show(int id) {
     std::cout << "show(" << id << ")" << std::endl;
 }
 
-void Utilisateur::borrow(int id) {
-    std::cout << "borrow(" << id << ")" << std::endl;
+void Utilisateur::borrow(Mediatheque& mediatheque, int id) {
+    // --- (3a) Vérifier si la ressource existe encore dans la médiathèque ---
+    const auto& ressources = mediatheque.getRessources(); // lecture seule ok
+    bool trouve = false;
+    for (const auto& r : ressources) {
+        // Hypothèse simple : Ressource a getId(); sinon adapte le nom de l'accesseur
+        if (r->getId() == id) {
+            trouve = true;
+            break;
+        }
+    }
+    if (!trouve) {
+        std::cout << "[borrow] Ressource " << id << " introuvable dans la médiathèque." << std::endl;
+        return;
+    }
+
+    // --- (3b) Éviter les doublons côté utilisateur ---
+    for (int borrowedId : emprunts) {
+        if (borrowedId == id) {
+            std::cout << "[borrow] Ressource " << id << " déjà empruntée par cet utilisateur." << std::endl;
+            return;
+        }
+    }
+
+    // --- (3c) Ajouter dans la liste d'emprunts de l'utilisateur ---
+    emprunts.push_back(id);
+
+    // --- (3d) Retirer la ressource de la médiathèque ---
+    mediatheque.deleteResource(id);
+
+    // --- (3e) Feedback simple ---
+    std::cout << "[borrow] OK : l'utilisateur " << this->id
+              << " a emprunté la ressource " << id << "." << std::endl;
 }

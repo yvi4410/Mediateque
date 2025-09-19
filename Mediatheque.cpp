@@ -1,4 +1,5 @@
 #include "Mediatheque.h"
+#include "Ressource.h"
 #include <iostream>
 #include <sstream>
 
@@ -15,6 +16,18 @@ void Mediatheque::search(const std::string&) {}
 
 const std::vector<std::unique_ptr<Ressource>>& Mediatheque::getRessources() const {
     return ressources;
+}
+
+void Mediatheque::deleteResource(int id) {
+    // --- (4b) Trouver l'élément dans le vector<unique_ptr<Ressource>> et l'effacer ---
+    for (auto it = ressources.begin(); it != ressources.end(); ++it) {
+        if ((*it)->getId() == id) {
+            ressources.erase(it); // libère l'élément, thanks à unique_ptr
+            std::cout << "[Mediatheque] Ressource " << id << " supprimée." << std::endl;
+            return;
+        }
+    }
+    std::cout << "[Mediatheque] Ressource " << id << " non trouvée." << std::endl;
 }
 
 void Mediatheque::dispatch() {
