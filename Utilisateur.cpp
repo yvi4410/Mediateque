@@ -1,4 +1,6 @@
 #include "Utilisateur.h"
+#include "Mediatheque.h"
+#include "Ressource.h"  
 #include <iostream>
 
 Utilisateur::Utilisateur(int id, const std::string& prenom, const std::string& nom)
@@ -8,8 +10,18 @@ void Utilisateur::bye() {
     std::cout << "Au revoir !" << std::endl;
 }
 
-void Utilisateur::list() {
-    std::cout << "list()" << std::endl;
+void Utilisateur::list(const Mediatheque& mediatheque) {
+    const auto& ressources = mediatheque.getRessources();
+
+    if (ressources.empty()) {
+        std::cout << "(Aucune ressource disponible)" << std::endl;
+        return;
+    }
+
+    std::cout << "Liste des ressources disponibles :" << std::endl;
+    for (const auto& ressource : ressources) {
+        std::cout << " - " << ressource->getRessourceTitle() << std::endl;
+    }
 }
 
 void Utilisateur::search(const std::string& q) {

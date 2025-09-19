@@ -13,6 +13,10 @@ void Mediatheque::clear() {}
 void Mediatheque::reset() {}
 void Mediatheque::search(const std::string&) {}
 
+const std::vector<std::unique_ptr<Ressource>>& Mediatheque::getRessources() const {
+    return ressources;
+}
+
 void Mediatheque::dispatch() {
     std::string input;
     while (true) {

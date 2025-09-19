@@ -5,6 +5,8 @@
 #include "Ressource.h"
 #include "Utilisateur.h"
 
+class Ressource; // Déclaration anticipée pour éviter les gros include et les imports circulaires
+
 class Mediatheque {
 
 private:
@@ -23,4 +25,5 @@ public:
     void show(int id);
     void deleteResource(int id);
     void reset();
+    const std::vector<std::unique_ptr<Ressource>>& getRessources() const;
 };
