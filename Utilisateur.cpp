@@ -6,7 +6,8 @@ namespace mediatheque {
     Utilisateur::Utilisateur() = default;
 
     void Utilisateur::bye() {
-        std::cout << "bye()" << std::endl;
+        std::cout << "Au revoir !" << std::endl;
+        exit(0);
     }
     void Utilisateur::list() {
         std::cout << "list()" << std::endl;

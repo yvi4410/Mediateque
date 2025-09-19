@@ -1,7 +1,7 @@
-#include "Application.h"
+#include "Mediatheque.h"
 
 int main() {
-    Application app;
+    Mediatheque app;
     app.dispatch();
     return 0;
 }

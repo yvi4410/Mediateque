@@ -10,11 +10,10 @@ add_executable(untitled main.cpp
         Administrateur.cpp
         Client.h
         Client.cpp
-        Application.cpp
+        Mediatheque.cpp
         CD.cpp
         DVD.cpp
         Livre.cpp
-        Mediatheque.cpp
         Ressource.cpp
         RessourceDigitaleAV.cpp
         RessourceNumeriqueFichier.cpp
