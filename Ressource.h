@@ -11,5 +11,6 @@ protected:
 
 public:
     Ressource(int id, std::string titre, std::string auteur, std::string etat);
+    std::string getRessourceTitle() const { return titre; }
 
 };
