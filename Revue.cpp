@@ -16,3 +16,19 @@ std::string Revue::getEditeur() const {
 std::vector<std::string> Revue::getArticles() const {
     return articles;
 }
+
+int Revue::getNbPages() const {
+    return nbPage;
+}
+
+void Revue::setNbPages(int n) {
+    nbPage = n;
+}
+
+void Revue::setEditeur(const std::string& e) {
+    editeur = e;
+}
+
+void Revue::setArticles(const std::vector<std::string>& a) {
+    articles = a;
+}
