@@ -4,3 +4,11 @@ je commence par RESSOURCE.cpp et .h
 J ai finis
 
 je fais RessourcePapier et RessourceDigitaleAV
+
+
+
+
+
+
+FINIR LA FONCTION BORROW DE UTILISATEUR,
+VOIR POURQUOI Chat MET Mediatheque.deleteRessource alors qu elle existe pas
