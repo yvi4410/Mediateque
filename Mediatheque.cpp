@@ -4,7 +4,6 @@
 #include <sstream>
 
 void Mediatheque::add(const std::string&) {}
-void Mediatheque::deleteResource(int) {}
 void Mediatheque::bye() {}
 void Mediatheque::list() {}
 void Mediatheque::load(const std::string&) {}
@@ -19,10 +18,9 @@ const std::vector<std::unique_ptr<Ressource>>& Mediatheque::getRessources() cons
 }
 
 void Mediatheque::deleteResource(int id) {
-    // --- (4b) Trouver l'élément dans le vector<unique_ptr<Ressource>> et l'effacer ---
     for (auto it = ressources.begin(); it != ressources.end(); ++it) {
         if ((*it)->getId() == id) {
-            ressources.erase(it); // libère l'élément, thanks à unique_ptr
+            ressources.erase(it);
             std::cout << "[Mediatheque] Ressource " << id << " supprimée." << std::endl;
             return;
         }
