@@ -16,11 +16,10 @@ public:
 
     int getId() const;
 
-    std::string getRessourceTitle() const;
+    std::string getTitre() const;
 
     void setId(int newId);
 
-    std::string getTitre() const;
     void setTitre(const std::string& newTitre);
 
     std::string getAuteur() const;

@@ -20,7 +20,7 @@ void Utilisateur::list(const Mediatheque& mediatheque) {
 
     std::cout << "Liste des ressources disponibles :" << std::endl;
     for (const auto& ressource : ressources) {
-        std::cout << " - " << ressource->getRessourceTitle() << std::endl;
+        std::cout << " - " << ressource->getTitre() << std::endl;
     }
 }
 

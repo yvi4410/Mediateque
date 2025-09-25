@@ -9,7 +9,7 @@ int Ressource::getId() const {
     return id;
 }
 
-std::string Ressource::getRessourceTitle() const {
+std::string Ressource::getTitre() const {
     return titre;
 }
 
