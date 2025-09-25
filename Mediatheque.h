@@ -26,7 +26,6 @@ private:
 
 public:
 	Mediatheque() = default;
-	~Mediatheque() = default;
 
 	const std::vector<std::unique_ptr<Ressource>>& getRessources() const;
 	Ressource* getRessource(int id) const;

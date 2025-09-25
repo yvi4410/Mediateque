@@ -17,6 +17,7 @@
 #include <iostream>
 #include <sstream>
 #include <algorithm>
+#include <cctype>
 
 /*
 class Mediatheque {
@@ -52,9 +53,37 @@ void Mediatheque::run() {
 }
 
 void Mediatheque::dispatch() {
-    // interactive entry point (placeholder)
-    std::cout << "[Mediatheque] dispatch() appelé (placeholder interactif)" << std::endl;
-    // could call dispatch(cmd) in a loop when implemented
+    std::string line;
+    while (true) {
+        std::cout << "> ";
+        if (!std::getline(std::cin, line)) break;
+
+        std::istringstream iss(line);
+        std::string cmd;
+        iss >> cmd;
+    // lowercase comparison
+    std::transform(cmd.begin(), cmd.end(), cmd.begin(), [](unsigned char c){ return static_cast<char>(::tolower(c)); });
+
+        if (cmd == "bye") {
+            // exit loop
+            break;
+        }
+
+        if (cmd == "add") {
+            std::string type;
+            iss >> type;
+            auto admin = dynamic_cast<Administrateur*>(currentUser.get());
+            if (!admin) {
+                std::cout << "Erreur: vous n'etes pas administrateur." << std::endl;
+                continue;
+            }
+            admin->add(type);
+            std::cout << "[Mediatheque] add executed (placeholder)." << std::endl;
+            continue;
+        }
+
+        std::cout << "Commande inconnue: " << cmd << std::endl;
+    }
 }
 
 void Mediatheque::dispatch(const std::string& /*cmd*/) {
