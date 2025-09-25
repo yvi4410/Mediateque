@@ -7,7 +7,7 @@
 
 /*
 class Mediatheque {
-	    +utilisateurs: Utilisateur
+	    +currentUser: Utilisateur
 	    +ressources: Ressource
 		+getRessource()
 	    +deleteRessource(id: int)
@@ -21,11 +21,21 @@ class Ressource;
 class Mediatheque {
 
 private:
-    std::vector<std::unique_ptr<Ressource>> ressources;
-    std::vector<std::unique_ptr<Utilisateur>> utilisateurs;
+	std::vector<std::unique_ptr<Ressource>> ressources;
+	std::unique_ptr<Utilisateur> currentUser;
 
 public:
-    const std::vector<std::unique_ptr<Ressource>>& getRessources() const;
-    void deleteResource(int id);
-    void dispatch();
+	Mediatheque() = default;
+	~Mediatheque() = default;
+
+	const std::vector<std::unique_ptr<Ressource>>& getRessources() const;
+	Ressource* getRessource(int id) const;
+
+    Utilisateur* getCurrentUser() const;
+	void setCurrentUser(std::unique_ptr<Utilisateur> user);
+
+	void deleteRessource(int id);
+	void run();
+	void dispatch();
+	void dispatch(const std::string& cmd);	
 };

@@ -4,6 +4,20 @@
 #include "Utilisateur.h"
 #include "Ressource.h"
 
+/*
+class Administrateur {
+	    +add(type: string)
+	    +load(filename: string)
+	    +save(filename: string)
+	    +clear()
+	    +deleteById(id: int)
+	    +ajouterUtilisateur(u: Utilisateur)
+	    +supprimerUtilisateur(id: int)
+	    +reset()
+	    +listerUtilisateurs()
+    }
+*/
+
 class Ressource;
 
 class Administrateur : public Utilisateur {
@@ -11,7 +25,8 @@ class Administrateur : public Utilisateur {
         Administrateur();
         ~Administrateur();
 
-        void add(const std::string& type);
+    // Create a resource (placeholder) - signature kept simple per class diagram
+    void add(const std::string& type);
         void load(const std::string& filename);
         void save(const std::string& filename);
         void clear();
