@@ -1,3 +1,12 @@
+#/*
+#class Ressource {
+#    +id: int
+#    +titre: string
+#    +auteur: string
+#    +etat: string
+#}
+#*/
+
 #include "Ressource.h"
 
 Ressource::Ressource(int id, std::string titre, std::string auteur, std::string etat)

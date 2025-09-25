@@ -1,3 +1,16 @@
+#/*
+#class Utilisateur {
+#    +id: int
+#    +prenom: string
+#    +nom: string
+#    +emprunts: Ressource[*]
+#    +list()
+#    +search(q: string)
+#    +show(id: int)
+#    +borrow(id: int)
+#}
+#*/
+
 #include "Utilisateur.h"
 #include "Mediatheque.h"
 #include <vector>

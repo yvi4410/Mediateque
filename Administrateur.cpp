@@ -1,3 +1,17 @@
+#/*
+#class Administrateur {
+#    +add(type: string)
+#    +load(filename: string)
+#    +save(filename: string)
+#    +clear()
+#    +deleteById(id: int)
+#    +ajouterUtilisateur(u: Utilisateur)
+#    +supprimerUtilisateur(id: int)
+#    +reset()
+#    +listerUtilisateurs()
+#}
+#*/
+
 #include "Administrateur.h"
 
 /*

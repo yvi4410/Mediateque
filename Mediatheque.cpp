@@ -1,3 +1,14 @@
+#/*
+#class Mediatheque {
+#    +currentUser: Utilisateur
+#    +ressources: Ressource
+#    +getRessource()
+#    +deleteRessource(id: int)
+#    +run()
+#    +dispatch(cmd: string)
+#}
+#*/
+
 #include "Mediatheque.h"
 #include "Ressource.h"
 #include "Administrateur.h"

@@ -1,3 +1,10 @@
+#/*
+#class RessourceDigitaleAV {
+#    +duree: int
+#    +maisonProduction: string
+#}
+#*/
+
 #include "RessourceDigitaleAV.h"
 
 RessourceDigitaleAV::RessourceDigitaleAV(int id, std::string titre, std::string auteur,

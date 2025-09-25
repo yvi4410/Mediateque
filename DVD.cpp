@@ -1,3 +1,9 @@
+#/*
+#class DVD {
+#    +nbChapitres: int
+#}
+#*/
+
 #include "DVD.h"
 
 DVD::DVD(int id, std::string titre, std::string auteur, std::string etat,

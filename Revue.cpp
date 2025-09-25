@@ -1,3 +1,11 @@
+#/*
+#class Revue {
+#    +editeur: string
+#    +nbArticles: int
+#    +nomsArticles: string[]
+#}
+#*/
+
 #include "Revue.h"
 #include <string>
 #include "RessourcePapier.h"

@@ -1,3 +1,9 @@
+#/*
+#class CD {
+#    +nbPistes: int
+#}
+#*/
+
 #include "CD.h"
 
 CD::CD(int id, std::string titre, std::string auteur, std::string etat,
