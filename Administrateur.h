@@ -4,7 +4,9 @@
 #include "Utilisateur.h"
 #include "Ressource.h"
 
-class Administrateur{
+class Ressource;
+
+class Administrateur : public Utilisateur {
     public:
         Administrateur();
         ~Administrateur();

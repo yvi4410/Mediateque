@@ -3,29 +3,24 @@
 #include <iostream>
 #include <sstream>
 
-void Mediatheque::add(const std::string&) {}
-void Mediatheque::bye() {}
-void Mediatheque::list() {}
-void Mediatheque::load(const std::string&) {}
-void Mediatheque::save(const std::string&) {}
-void Mediatheque::show(int) {}
-void Mediatheque::clear() {}
-void Mediatheque::reset() {}
-void Mediatheque::search(const std::string&) {}
+/*
+class Mediatheque {
+	    +utilisateurs: Utilisateur
+	    +ressources: Ressource
+		+getRessource()
+	    +deleteRessource(id: int)
+	    +run()
+	    +dispatch(cmd: string)
+    }
+*/
 
 const std::vector<std::unique_ptr<Ressource>>& Mediatheque::getRessources() const {
     return ressources;
 }
 
+
 void Mediatheque::deleteResource(int id) {
-    for (auto it = ressources.begin(); it != ressources.end(); ++it) {
-        if ((*it)->getId() == id) {
-            ressources.erase(it);
-            std::cout << "[Mediatheque] Ressource " << id << " supprimée." << std::endl;
-            return;
-        }
-    }
-    std::cout << "[Mediatheque] Ressource " << id << " non trouvée." << std::endl;
+    // Trouver et supprimer la ressource par ID
 }
 
 void Mediatheque::dispatch() {
@@ -42,6 +37,7 @@ void Mediatheque::dispatch() {
                   << "8. SHOW id\n"
                   << "9. DELETE id\n"
                   << "10. RESET\n"
+                  << "11. LISTER UTILISATEURS\n"
                   << "Entrez votre commande : ";
         std::getline(std::cin, input);
 
@@ -49,39 +45,29 @@ void Mediatheque::dispatch() {
         std::string cmd;
         iss >> cmd;
 
-        if (cmd == "BYE") {
+        if (cmd == "BYE" || "bye") {
             bye();
             break;
-        } else if (cmd == "ADD") {
-            std::string type;
-            iss >> type;
-            add(type);
-        } else if (cmd == "LOAD") {
-            std::string filename;
-            iss >> filename;
-            load(filename);
-        } else if (cmd == "SAVE") {
-            std::string filename;
-            iss >> filename;
-            save(filename);
-        } else if (cmd == "SEARCH") {
-            std::string chaine;
-            iss >> chaine;
-            search(chaine);
-        } else if (cmd == "CLEAR") {
-            clear();
-        } else if (cmd == "LIST") {
-            list();
-        } else if (cmd == "SHOW") {
-            int id;
-            iss >> id;
-            show(id);
-        } else if (cmd == "DELETE") {
-            int id;
-            iss >> id;
-            deleteResource(id);
-        } else if (cmd == "RESET") {
-            reset();
+        } else if (cmd == "ADD" || "add") {
+            // Administrateur::add() // Seul Administrateur peut ajouter, non pas Client
+        } else if (cmd == "LOAD" || "load") {
+            // Administrateur::load() // Seul Administrateur peut charger, non pas Client
+        } else if (cmd == "SAVE" || "save") {
+            // Administrateur::save() // Seul Administrateur peut sauvegarder, non pas Client
+        } else if (cmd == "SEARCH" || "search") {
+            // Utilisateur::search() // Client et Administrateur peuvent chercher
+        } else if (cmd == "CLEAR" || "clear") {
+            // Administrateur::clear() // Seul Administrateur peut clear, non pas Client
+        } else if (cmd == "LIST" || "list") {
+            // Utilisateur::list() // Client et Administrateur peuvent lister
+        } else if (cmd == "SHOW" || "show") {
+            // Utilisateur::show() // Client et Administrateur peuvent montrer
+        } else if (cmd == "DELETE" || "delete") {
+            // Administrateur::deleteById() // Seul Administrateur peut delete, non pas Client
+        } else if (cmd == "RESET" || "reset") {
+            // Administrateur::reset() // Seul Administrateur peut reset, non pas Client
+        } else if (cmd == "LISTER UTILISATEURS" || "lister utilisateurs") {
+            // Administrateur::listerUtilisateurs() // Seul Administrateur peut lister les utilisateurs
         } else {
             std::cout << "Commande inconnue.\n";
         }
