@@ -1,3 +1,9 @@
+/*
+class Client {
+    // simple utilisateur
+}
+*/
+
 #pragma once
 #include "Utilisateur.h"
 

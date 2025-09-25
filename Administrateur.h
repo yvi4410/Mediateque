@@ -1,22 +1,22 @@
+/*
+class Administrateur {
+    +add(type: string)
+    +load(filename: string)
+    +save(filename: string)
+    +clear()
+    +deleteById(id: int)
+    +ajouterUtilisateur(u: Utilisateur)
+    +supprimerUtilisateur(id: int)
+    +reset()
+    +listerUtilisateurs()
+}
+*/
+
 #pragma once
 #include <string>
 #include <vector>
 #include "Utilisateur.h"
 #include "Ressource.h"
-
-/*
-class Administrateur {
-	    +add(type: string)
-	    +load(filename: string)
-	    +save(filename: string)
-	    +clear()
-	    +deleteById(id: int)
-	    +ajouterUtilisateur(u: Utilisateur)
-	    +supprimerUtilisateur(id: int)
-	    +reset()
-	    +listerUtilisateurs()
-    }
-*/
 
 class Ressource;
 

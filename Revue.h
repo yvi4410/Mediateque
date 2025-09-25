@@ -1,3 +1,11 @@
+/*
+class Revue {
+    +editeur: string
+    +nbArticles: int
+    +nomsArticles: string[]
+}
+*/
+
 #pragma once
 #include "RessourcePapier.h"
 #include <vector>

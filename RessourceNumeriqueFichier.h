@@ -1,3 +1,11 @@
+/*
+class RessourceNumeriqueFichier {
+    +type: string
+    +taille: int
+    +url: string
+}
+*/
+
 #pragma once
 #include "Ressource.h"
 

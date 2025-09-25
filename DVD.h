@@ -1,3 +1,9 @@
+/*
+class DVD {
+    +nbChapitres: int
+}
+*/
+
 #pragma once
 #include "RessourceDigitaleAV.h"
 

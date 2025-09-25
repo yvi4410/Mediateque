@@ -1,3 +1,12 @@
+/*
+class Ressource {
+    +id: int
+    +titre: string
+    +auteur: string
+    +etat: string
+}
+*/
+
 #pragma once
 #include <string>
 

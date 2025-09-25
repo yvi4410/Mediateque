@@ -1,20 +1,20 @@
+/*
+class Mediatheque {
+	+currentUser: Utilisateur
+	+ressources: Ressource
+	+getRessource()
+	+deleteRessource(id: int)
+	+run()
+	+dispatch(cmd: string)
+}
+*/
+
 #pragma once
 #include <string>
 #include <vector>
 #include <memory>
 #include "Ressource.h"
 #include "Utilisateur.h"
-
-/*
-class Mediatheque {
-	    +currentUser: Utilisateur
-	    +ressources: Ressource
-		+getRessource()
-	    +deleteRessource(id: int)
-	    +run()
-	    +dispatch(cmd: string)
-    }
-*/
 
 class Ressource;
 
