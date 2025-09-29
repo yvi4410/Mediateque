@@ -11,7 +11,7 @@ public:
     void setCurrentUser(std::unique_ptr<Utilisateur> user);
     Utilisateur* getCurrentUser() const;
 
-    // Boucle d'interface simple : "add" et "bye"
+    // Boucle d'interface simple
     void dispatch();
 
 private:

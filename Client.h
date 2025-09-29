@@ -4,5 +4,5 @@
 class Client : public Utilisateur {
 public:
     ~Client() override = default;
-    // Hérite du comportement par défaut de Utilisateur::add()
+    // Hérite des placeholders Utilisateur (pas d'add autorisé, etc.)
 };

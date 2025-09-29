@@ -9,10 +9,7 @@ int main() {
 
     std::cout << "Êtes-vous administrateur ? (oui/non) : ";
     std::string answer;
-    std::getline(std::cin, answer);
-
-    // Normaliser un peu la réponse
-    for (auto& ch : answer) ch = static_cast<char>(std::tolower(static_cast<unsigned char>(ch)));
+    std::cin >> answer;
 
     if (answer == "oui" || answer == "o" || answer == "yes" || answer == "y") {
         app.setCurrentUser(std::make_unique<Administrateur>());

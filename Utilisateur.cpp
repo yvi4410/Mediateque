@@ -1,3 +1,2 @@
 #include "Utilisateur.h"
-
-// Rien à implémenter ici pour l'instant (virtual dtor par défaut)
+// Tout est déjà inline/placeholder dans le .h pour rester minimal

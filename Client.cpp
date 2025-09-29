@@ -1,3 +1,2 @@
 #include "Client.h"
-
-// Aucun code additionnel nécessaire pour ce scénario minimal
+// Rien à ajouter pour le scénario minimal
