@@ -1,13 +1,8 @@
-/*
-class Client {
-    // simple utilisateur
-}
-*/
-
 #pragma once
 #include "Utilisateur.h"
 
-class Client : public Utilisateur{
+class Client : public Utilisateur {
 public:
-    using Utilisateur::Utilisateur; // constructeur d'utilisateur
+    ~Client() override = default;
+    // Hérite du comportement par défaut de Utilisateur::add()
 };

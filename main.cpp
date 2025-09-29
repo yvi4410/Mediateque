@@ -2,20 +2,24 @@
 #include "Administrateur.h"
 #include "Client.h"
 #include <iostream>
+#include <memory>
 
 int main() {
     Mediatheque app;
 
-    std::cout << "Etes-vous administrateur ? (oui/non) : ";
+    std::cout << "Êtes-vous administrateur ? (oui/non) : ";
     std::string answer;
-    if (!std::getline(std::cin, answer)) return 0;
+    std::getline(std::cin, answer);
 
-    if (answer == "oui" || answer == "o" || answer == "yes") {
+    // Normaliser un peu la réponse
+    for (auto& ch : answer) ch = static_cast<char>(std::tolower(static_cast<unsigned char>(ch)));
+
+    if (answer == "oui" || answer == "o" || answer == "yes" || answer == "y") {
         app.setCurrentUser(std::make_unique<Administrateur>());
-        std::cout << "Mode administrateur active." << std::endl;
+        std::cout << "Mode administrateur activé.\n";
     } else {
-        app.setCurrentUser(std::make_unique<Client>(1, "Client", "Unique"));
-        std::cout << "Mode client active." << std::endl;
+        app.setCurrentUser(std::make_unique<Client>());
+        std::cout << "Mode client activé.\n";
     }
 
     app.dispatch();

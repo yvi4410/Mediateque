@@ -1,9 +1,3 @@
-#/*
-#class Client {
-#    // simple utilisateur
-#}
-#*/
-
 #include "Client.h"
 
-// Implémentation des méthodes de Client (vide pour l'instant)
+// Aucun code additionnel nécessaire pour ce scénario minimal
