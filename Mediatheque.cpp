@@ -1,6 +1,11 @@
 #include "Mediatheque.h"
 #include "Utilisateur.h"
-#include "Administrateur.h"
+#include "Ressource.h"
+#include "Livre.h"
+#include "CD.h"
+#include "DVD.h"
+#include "VHS.h"
+#include "Revue.h"
 #include <iostream>
 #include <algorithm>
 #include <cctype>
@@ -8,6 +13,9 @@
 
 void Mediatheque::setCurrentUser(std::unique_ptr<Utilisateur> user) {
     currentUser = std::move(user);
+    if (currentUser) {
+        currentUser->setMediatheque(this);
+    }
 }
 
 Utilisateur* Mediatheque::getCurrentUser() const {
@@ -45,8 +53,7 @@ void Mediatheque::dispatch() {
             else std::cout << "[Erreur] Aucun utilisateur connecté.\n";
 
         } else if (cmd == "list") {
-            if (currentUser) currentUser->list();
-            else std::cout << "[Erreur] Aucun utilisateur connecté.\n";
+            listRessources();
 
         } else if (cmd == "search") {
             if (currentUser) currentUser->search(arg);
@@ -64,35 +71,21 @@ void Mediatheque::dispatch() {
 
         } else if (cmd == "load") {
             if (!currentUser) { std::cout << "[Erreur] Aucun utilisateur connecté.\n"; }
-            else {
-                auto* admin = dynamic_cast<Administrateur*>(currentUser.get());
-                if (admin) admin->load(arg);
-                else std::cout << "[Erreur] Commande réservée aux administrateurs.\n";
-            }
+            else currentUser->load(arg);
 
         } else if (cmd == "save") {
             if (!currentUser) { std::cout << "[Erreur] Aucun utilisateur connecté.\n"; }
-            else {
-                auto* admin = dynamic_cast<Administrateur*>(currentUser.get());
-                if (admin) admin->save(arg);
-                else std::cout << "[Erreur] Commande réservée aux administrateurs.\n";
-            }
+            else currentUser->save(arg);
 
         } else if (cmd == "clear") {
             if (!currentUser) { std::cout << "[Erreur] Aucun utilisateur connecté.\n"; }
-            else {
-                auto* admin = dynamic_cast<Administrateur*>(currentUser.get());
-                if (admin) admin->clear();
-                else std::cout << "[Erreur] Commande réservée aux administrateurs.\n";
-            }
+            else currentUser->clear();
 
         } else if (cmd == "delete") {
             if (!currentUser) { std::cout << "[Erreur] Aucun utilisateur connecté.\n"; }
             else {
                 int id = arg.empty() ? -1 : std::stoi(arg);
-                auto* admin = dynamic_cast<Administrateur*>(currentUser.get());
-                if (admin) admin->deleteById(id);
-                else std::cout << "[Erreur] Commande réservée aux administrateurs.\n";
+                currentUser->deleteById(id);
             }
 
         } else if (cmd == "ajouterutilisateur") {
@@ -103,11 +96,8 @@ void Mediatheque::dispatch() {
                 if (!(as >> id >> prenom >> nom)) {
                     std::cout << "Usage: ajouterUtilisateur <id> <prenom> <nom>\n";
                 } else {
-                    auto* admin = dynamic_cast<Administrateur*>(currentUser.get());
-                    if (admin) {
-                        Utilisateur u(id, prenom, nom);
-                        admin->ajouterUtilisateur(u);
-                    } else std::cout << "[Erreur] Commande réservée aux administrateurs.\n";
+                    Utilisateur u(id, prenom, nom);
+                    currentUser->ajouterUtilisateur(u);
                 }
             }
 
@@ -115,28 +105,50 @@ void Mediatheque::dispatch() {
             if (!currentUser) { std::cout << "[Erreur] Aucun utilisateur connecté.\n"; }
             else {
                 int id = arg.empty() ? -1 : std::stoi(arg);
-                auto* admin = dynamic_cast<Administrateur*>(currentUser.get());
-                if (admin) admin->supprimerUtilisateur(id);
-                else std::cout << "[Erreur] Commande réservée aux administrateurs.\n";
+                currentUser->supprimerUtilisateur(id);
             }
 
         } else if (cmd == "reset") {
             if (!currentUser) { std::cout << "[Erreur] Aucun utilisateur connecté.\n"; }
-            else {
-                auto* admin = dynamic_cast<Administrateur*>(currentUser.get());
-                if (admin) admin->reset();
-                else std::cout << "[Erreur] Commande réservée aux administrateurs.\n";
-            }
+            else currentUser->reset();
 
         } else if (cmd == "listerutilisateurs") {
             if (!currentUser) { std::cout << "[Erreur] Aucun utilisateur connecté.\n"; }
-            else {
-                auto* admin = dynamic_cast<Administrateur*>(currentUser.get());
-                if (admin) admin->listerUtilisateurs();
-                else std::cout << "[Erreur] Commande réservée aux administrateurs.\n";
-            }
+            else currentUser->listerUtilisateurs();
         } else {
             std::cout << "Commande inconnue. Utilisez: add [type] | list | search <q> | show <id> | borrow <id> | bye\n";
+        }
+    }
+}
+
+void Mediatheque::addRessource(std::unique_ptr<Ressource> ressource) {
+    ressources.push_back(std::move(ressource));
+}
+
+void Mediatheque::listRessources() const {
+    if (searchResults.empty()) {
+        // Afficher toutes les ressources
+        if (ressources.empty()) {
+            std::cout << "Aucune ressource disponible.\n";
+            return;
+        }
+        std::cout << "=== Liste des ressources ===\n";
+        for (const auto& ressource : ressources) {
+            std::cout << "ID: " << ressource->getId() 
+                      << " | Type: " << ressource->getType()
+                      << " | Titre: " << ressource->getTitre()
+                      << " | Auteur: " << ressource->getAuteur()
+                      << " | Etat: " << ressource->getEtat() << "\n";
+        }
+    } else {
+        // Afficher seulement les résultats de recherche
+        std::cout << "=== Résultats de recherche ===\n";
+        for (const auto& ressource : searchResults) {
+            std::cout << "ID: " << ressource->getId() 
+                      << " | Type: " << ressource->getType()
+                      << " | Titre: " << ressource->getTitre()
+                      << " | Auteur: " << ressource->getAuteur()
+                      << " | Etat: " << ressource->getEtat() << "\n";
         }
     }
 }

@@ -20,6 +20,7 @@ protected:
 
 public:
     Ressource(int id, std::string titre, std::string auteur, std::string etat);
+    virtual ~Ressource() = default;
 
     int getId() const;
 

@@ -1,6 +1,8 @@
 #pragma once
 #include <memory>
 #include <string>
+#include <vector>
+#include "Ressource.h"
 
 class Utilisateur;
 
@@ -14,6 +16,12 @@ public:
     // Boucle d'interface simple
     void dispatch();
 
+    // Gestion des ressources
+    void addRessource(std::unique_ptr<Ressource> ressource);
+    void listRessources() const;
+    std::vector<Ressource*> searchResults;
+
 private:
     std::unique_ptr<Utilisateur> currentUser;
+    std::vector<std::unique_ptr<Ressource>> ressources;
 };
