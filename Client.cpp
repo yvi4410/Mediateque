@@ -6,7 +6,8 @@ void Client::add(const std::string&) {
 }
 
 void Client::load(const std::string&) {
-    std::cout << "[Erreur] Vous n'avez pas le droit de charger des données.\n";
+    // Maintenant permis pour les clients - lecture seule
+    std::cout << "[Client] Chargement des données autorisé.\n";
 }
 
 void Client::save(const std::string&) {

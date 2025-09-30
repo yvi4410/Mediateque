@@ -29,6 +29,7 @@ public:
     virtual void search(const std::string& q);
     virtual void show(int idRessource);
     virtual void borrow(int idRessource);
+    virtual void showBorrow(); // Afficher les emprunts
 
     // Commandes réservées aux administrateurs mais exposées polimorphiquement
     // Par défaut l'utilisateur n'a pas le droit — les administrateurs override.

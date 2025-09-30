@@ -15,10 +15,20 @@ public:
 
     // Boucle d'interface simple
     void dispatch();
+    void showCommands() const; // Afficher les commandes disponibles
 
     // Gestion des ressources
     void addRessource(std::unique_ptr<Ressource> ressource);
     void listRessources() const;
+    void searchRessources(const std::string& query);
+    void clearSearchResults();
+    void showRessource(int id) const;
+    void deleteRessource(int id);
+    void resetRessources();
+    void loadFromFile(const std::string& filename);
+    void saveToFile(const std::string& filename) const;
+    bool borrowRessource(int id); // Emprunter une ressource (change l'état)
+    Ressource* findRessource(int id) const; // Trouver une ressource par ID
     std::vector<Ressource*> searchResults;
 
 private:

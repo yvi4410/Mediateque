@@ -29,10 +29,10 @@ void Administrateur::add(const std::string& type) {
     std::cout << "ID: ";
     int id;
     std::cin >> id;
-    std::cin.ignore(); // vider le buffer
     
     std::cout << "Titre: ";
     std::string titre;
+    std::cin.ignore(); // vider le buffer après la lecture de l'entier
     std::getline(std::cin, titre);
     
     std::cout << "Auteur: ";
@@ -85,19 +85,23 @@ void Administrateur::add(const std::string& type) {
 }
 
 void Administrateur::load(const std::string& filename) {
-    std::cout << "[Admin] load(\"" << filename << "\") -> placeholder: chargerait des données.\n";
+    // La vraie logique est dans Mediatheque::loadFromFile
+    std::cout << "[Admin] Chargement des données depuis " << filename << "\n";
 }
 
 void Administrateur::save(const std::string& filename) {
-    std::cout << "[Admin] save(\"" << filename << "\") -> placeholder: sauverait des données.\n";
+    // La vraie logique est dans Mediatheque::saveToFile
+    std::cout << "[Admin] Sauvegarde des données vers " << filename << "\n";
 }
 
 void Administrateur::clear() {
-    std::cout << "[Admin] clear() -> placeholder: viderait les listes/résultats.\n";
+    // La vraie logique est dans Mediatheque::clearSearchResults
+    std::cout << "[Admin] Effacement des résultats de recherche.\n";
 }
 
 void Administrateur::deleteById(int id) {
-    std::cout << "[Admin] deleteById(" << id << ") -> placeholder: supprimerait la ressource.\n";
+    // La vraie logique est dans Mediatheque::deleteRessource
+    std::cout << "[Admin] Suppression de la ressource ID " << id << "\n";
 }
 
 void Administrateur::ajouterUtilisateur(const Utilisateur& u) {
@@ -111,7 +115,8 @@ void Administrateur::supprimerUtilisateur(int id) {
 }
 
 void Administrateur::reset() {
-    std::cout << "[Admin] reset() -> placeholder: remettrait l'état à zéro.\n";
+    // La vraie logique est dans Mediatheque::resetRessources
+    std::cout << "[Admin] Remise à zéro de toutes les ressources.\n";
 }
 
 void Administrateur::listerUtilisateurs() {
