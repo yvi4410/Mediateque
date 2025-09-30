@@ -25,9 +25,9 @@ Utilisateur* Mediatheque::getCurrentUser() const {
 
 void Mediatheque::dispatch() {
     std::string line;
-    std::cout << "Commandes disponibles: add [type] | list | search <q> | show <id> | borrow <id> | "
-              << "load <file> | save <file> | clear | delete <id> | ajouterUtilisateur <id> <prenom> <nom> | "
-              << "supprimerUtilisateur <id> | reset | listerUtilisateurs | bye\n";
+    std::cout << "Commandes disponibles:\n>> add [type] \n>> list \n>> search <q> \n>> show <id> \n>> borrow <id> \n"
+              << ">> load <file> \n>> save <file> \n>> clear \n>> delete <id> \n>> ajouterUtilisateur <id> <prenom> <nom> \n>> "
+              << "supprimerUtilisateur <id> \n>> reset \n>> listerUtilisateurs \n>> bye\n";
 
     while (true) {
         std::cout << "> ";
