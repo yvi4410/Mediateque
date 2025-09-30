@@ -1,5 +1,6 @@
 #include "Mediatheque.h"
 #include "Utilisateur.h"
+#include "Administrateur.h"
 #include <iostream>
 #include <algorithm>
 #include <cctype>
@@ -13,15 +14,12 @@ Utilisateur* Mediatheque::getCurrentUser() const {
     return currentUser.get();
 }
 
-static std::string to_lower_copy(std::string s) {
-    std::transform(s.begin(), s.end(), s.begin(),
-                   [](unsigned char c){ return static_cast<char>(std::tolower(c)); });
-    return s;
-}
 
 void Mediatheque::dispatch() {
     std::string line;
-    std::cout << "Commandes disponibles: add [type] | list | search <q> | show <id> | borrow <id> | bye\n";
+    std::cout << "Commandes disponibles: add [type] | list | search <q> | show <id> | borrow <id> | "
+              << "load <file> | save <file> | clear | delete <id> | ajouterUtilisateur <id> <prenom> <nom> | "
+              << "supprimerUtilisateur <id> | reset | listerUtilisateurs | bye\n";
 
     while (true) {
         std::cout << "> ";
@@ -37,35 +35,106 @@ void Mediatheque::dispatch() {
         if (!arg.empty() && arg[0] == ' ')    // trim espace initial
             arg.erase(0, 1);
 
-        std::string cmdLower = to_lower_copy(cmd);
 
-        if (cmdLower == "bye") {
+        if (cmd == "bye") {
             std::cout << "Au revoir.\n";
             break;
 
-        } else if (cmdLower == "add") {
-            const std::string type = arg.empty() ? "default" : to_lower_copy(arg);
-            if (currentUser) currentUser->add(type);
+        } else if (cmd == "add") {
+            if (currentUser) currentUser->add(arg);
             else std::cout << "[Erreur] Aucun utilisateur connecté.\n";
 
-        } else if (cmdLower == "list") {
+        } else if (cmd == "list") {
             if (currentUser) currentUser->list();
             else std::cout << "[Erreur] Aucun utilisateur connecté.\n";
 
-        } else if (cmdLower == "search") {
+        } else if (cmd == "search") {
             if (currentUser) currentUser->search(arg);
             else std::cout << "[Erreur] Aucun utilisateur connecté.\n";
 
-        } else if (cmdLower == "show") {
+        } else if (cmd == "show") {
             int idR = arg.empty() ? -1 : std::stoi(arg);
             if (currentUser) currentUser->show(idR);
             else std::cout << "[Erreur] Aucun utilisateur connecté.\n";
 
-        } else if (cmdLower == "borrow") {
+        } else if (cmd == "borrow") {
             int idR = arg.empty() ? -1 : std::stoi(arg);
             if (currentUser) currentUser->borrow(idR);
             else std::cout << "[Erreur] Aucun utilisateur connecté.\n";
 
+        } else if (cmd == "load") {
+            if (!currentUser) { std::cout << "[Erreur] Aucun utilisateur connecté.\n"; }
+            else {
+                auto* admin = dynamic_cast<Administrateur*>(currentUser.get());
+                if (admin) admin->load(arg);
+                else std::cout << "[Erreur] Commande réservée aux administrateurs.\n";
+            }
+
+        } else if (cmd == "save") {
+            if (!currentUser) { std::cout << "[Erreur] Aucun utilisateur connecté.\n"; }
+            else {
+                auto* admin = dynamic_cast<Administrateur*>(currentUser.get());
+                if (admin) admin->save(arg);
+                else std::cout << "[Erreur] Commande réservée aux administrateurs.\n";
+            }
+
+        } else if (cmd == "clear") {
+            if (!currentUser) { std::cout << "[Erreur] Aucun utilisateur connecté.\n"; }
+            else {
+                auto* admin = dynamic_cast<Administrateur*>(currentUser.get());
+                if (admin) admin->clear();
+                else std::cout << "[Erreur] Commande réservée aux administrateurs.\n";
+            }
+
+        } else if (cmd == "delete") {
+            if (!currentUser) { std::cout << "[Erreur] Aucun utilisateur connecté.\n"; }
+            else {
+                int id = arg.empty() ? -1 : std::stoi(arg);
+                auto* admin = dynamic_cast<Administrateur*>(currentUser.get());
+                if (admin) admin->deleteById(id);
+                else std::cout << "[Erreur] Commande réservée aux administrateurs.\n";
+            }
+
+        } else if (cmd == "ajouterutilisateur") {
+            if (!currentUser) { std::cout << "[Erreur] Aucun utilisateur connecté.\n"; }
+            else {
+                std::istringstream as(arg);
+                int id; std::string prenom, nom;
+                if (!(as >> id >> prenom >> nom)) {
+                    std::cout << "Usage: ajouterUtilisateur <id> <prenom> <nom>\n";
+                } else {
+                    auto* admin = dynamic_cast<Administrateur*>(currentUser.get());
+                    if (admin) {
+                        Utilisateur u(id, prenom, nom);
+                        admin->ajouterUtilisateur(u);
+                    } else std::cout << "[Erreur] Commande réservée aux administrateurs.\n";
+                }
+            }
+
+        } else if (cmd == "supprimerutilisateur") {
+            if (!currentUser) { std::cout << "[Erreur] Aucun utilisateur connecté.\n"; }
+            else {
+                int id = arg.empty() ? -1 : std::stoi(arg);
+                auto* admin = dynamic_cast<Administrateur*>(currentUser.get());
+                if (admin) admin->supprimerUtilisateur(id);
+                else std::cout << "[Erreur] Commande réservée aux administrateurs.\n";
+            }
+
+        } else if (cmd == "reset") {
+            if (!currentUser) { std::cout << "[Erreur] Aucun utilisateur connecté.\n"; }
+            else {
+                auto* admin = dynamic_cast<Administrateur*>(currentUser.get());
+                if (admin) admin->reset();
+                else std::cout << "[Erreur] Commande réservée aux administrateurs.\n";
+            }
+
+        } else if (cmd == "listerutilisateurs") {
+            if (!currentUser) { std::cout << "[Erreur] Aucun utilisateur connecté.\n"; }
+            else {
+                auto* admin = dynamic_cast<Administrateur*>(currentUser.get());
+                if (admin) admin->listerUtilisateurs();
+                else std::cout << "[Erreur] Commande réservée aux administrateurs.\n";
+            }
         } else {
             std::cout << "Commande inconnue. Utilisez: add [type] | list | search <q> | show <id> | borrow <id> | bye\n";
         }
