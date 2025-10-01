@@ -44,14 +44,13 @@ void Mediatheque::showCommands() const {
 
 void Mediatheque::dispatch() {
     std::string line;
-    showCommands(); // Afficher les commandes au début
+    showCommands(); 
 
     while (true) {
         std::cout << "\n> ";
         if (!std::getline(std::cin, line)) break;
         if (line.empty()) continue;
 
-        // Parse très simple: commande + (arg1)
         std::istringstream iss(line);
         std::string cmd;
         iss >> cmd;
@@ -98,7 +97,6 @@ void Mediatheque::dispatch() {
             if (!currentUser) { 
                 std::cout << "[Erreur] Aucun utilisateur connecté.\n"; 
             } else {
-                // Tous les utilisateurs peuvent charger des fichiers
                 loadFromFile(arg);
             }
             showCommands();
@@ -178,6 +176,63 @@ void Mediatheque::addRessource(std::unique_ptr<Ressource> ressource) {
     ressources.push_back(std::move(ressource));
 }
 
+void Mediatheque::displayRessourceDetails(const Ressource* ressource) const {
+    std::cout << "ID: " << ressource->getId() 
+              << " | Type: " << ressource->getType()
+              << " | Titre: " << ressource->getTitre()
+              << " | Auteur: " << ressource->getAuteur()
+              << " | Etat: " << ressource->getEtat();
+    
+    // Affichage des détails spécifiques selon le type
+    std::string type = ressource->getType();
+    std::transform(type.begin(), type.end(), type.begin(), ::tolower);
+    
+    if (type == "livre") {
+        const Livre* livre = dynamic_cast<const Livre*>(ressource);
+        if (livre) {
+            std::cout << " | Année: " << livre->getAnnee()
+                      << " | Pages: " << livre->getNbPages()
+                      << " | Collection: " << livre->getCollection()
+                      << " | Résumé: " << livre->getResume();
+        }
+    } else if (type == "cd") {
+        const CD* cd = dynamic_cast<const CD*>(ressource);
+        if (cd) {
+            std::cout << " | Durée: " << cd->getDuree() << "min"
+                      << " | Maison: " << cd->getMaison()
+                      << " | Pistes: " << cd->getNbPistes();
+        }
+    } else if (type == "revue") {
+        const Revue* revue = dynamic_cast<const Revue*>(ressource);
+        if (revue) {
+            std::cout << " | Année: " << revue->getAnnee()
+                      << " | Pages: " << revue->getNbPage()
+                      << " | Collection: " << revue->getCollection()
+                      << " | Éditeur: " << revue->getEditeur()
+                      << " | Articles: " << revue->getArticles().size();
+        }
+    } else if (type == "dvd") {
+        const DVD* dvd = dynamic_cast<const DVD*>(ressource);
+        if (dvd) {
+            std::cout << " | Durée: " << dvd->getDuree() << "min"
+                      << " | Maison: " << dvd->getMaison()
+                      << " | Chapitres: " << dvd->getNbChapitres();
+        }
+    } else if (type == "vhs") {
+        const VHS* vhs = dynamic_cast<const VHS*>(ressource);
+        if (vhs) {
+            std::cout << " | Durée: " << vhs->getDuree() << "min"
+                      << " | Maison: " << vhs->getMaison();
+        }
+    }
+    
+    // Ajouter [non disponible] si emprunté
+    if (ressource->getEtat() == "Emprunte") {
+        std::cout << " [non disponible]";
+    }
+    std::cout << "\n";
+}
+
 void Mediatheque::listRessources() const {
     if (searchResults.empty()) {
         // Afficher toutes les ressources
@@ -187,33 +242,13 @@ void Mediatheque::listRessources() const {
         }
         std::cout << "=== Liste des ressources ===\n";
         for (const auto& ressource : ressources) {
-            std::cout << "ID: " << ressource->getId() 
-                      << " | Type: " << ressource->getType()
-                      << " | Titre: " << ressource->getTitre()
-                      << " | Auteur: " << ressource->getAuteur()
-                      << " | Etat: " << ressource->getEtat();
-            
-            // Ajouter [non disponible] si emprunté
-            if (ressource->getEtat() == "Emprunte") {
-                std::cout << " [non disponible]";
-            }
-            std::cout << "\n";
+            displayRessourceDetails(ressource.get());
         }
     } else {
         // Afficher les résultats de recherche
         std::cout << "=== Résultats de recherche ===\n";
         for (const auto& ressource : searchResults) {
-            std::cout << "ID: " << ressource->getId() 
-                      << " | Type: " << ressource->getType()
-                      << " | Titre: " << ressource->getTitre()
-                      << " | Auteur: " << ressource->getAuteur()
-                      << " | Etat: " << ressource->getEtat();
-            
-            // Ajouter [non disponible] si emprunté
-            if (ressource->getEtat() == "Emprunte") {
-                std::cout << " [non disponible]";
-            }
-            std::cout << "\n";
+            displayRessourceDetails(ressource);
         }
     }
 }
@@ -410,16 +445,29 @@ void Mediatheque::saveToFile(const std::string& filename) const {
              << ressource->getEtat();
         
         // Ajouter des détails spécifiques selon le type
-        if (type == "livre") {
-            file << " 2023 100 Collection Resume";
-        } else if (type == "cd") {
-            file << " 60 MaisonProd 12";
-        } else if (type == "revue") {
-            file << " 2023 100 Collection Resume Editeur 5";
-        } else if (type == "dvd") {
-            file << " 60 MaisonProd 8";
-        } else if (type == "vhs") {
-            file << " 60 MaisonProd";
+        if (auto livre = dynamic_cast<Livre*>(ressource.get())) {
+            file << " " << livre->getAnnee() 
+                 << " " << livre->getNbPages() 
+                 << " " << livre->getCollection() 
+                 << " " << livre->getResume();
+        } else if (auto cd = dynamic_cast<CD*>(ressource.get())) {
+            file << " " << cd->getDuree() 
+                 << " " << cd->getMaison() 
+                 << " " << cd->getNbPistes();
+        } else if (auto revue = dynamic_cast<Revue*>(ressource.get())) {
+            file << " " << revue->getAnnee() 
+                 << " " << revue->getNbPages() 
+                 << " " << revue->getCollection() 
+                 << " " << revue->getResume() 
+                 << " " << revue->getEditeur() 
+                 << " " << revue->getArticles().size();
+        } else if (auto dvd = dynamic_cast<DVD*>(ressource.get())) {
+            file << " " << dvd->getDuree() 
+                 << " " << dvd->getMaison() 
+                 << " " << dvd->getNbChapitres();
+        } else if (auto vhs = dynamic_cast<VHS*>(ressource.get())) {
+            file << " " << vhs->getDuree() 
+                 << " " << vhs->getMaison();
         }
         
         file << "\n";

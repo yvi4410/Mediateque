@@ -16,6 +16,7 @@ public:
     // Boucle d'interface simple
     void dispatch();
     void showCommands() const; // Afficher les commandes disponibles
+    void displayRessourceDetails(const Ressource* ressource) const; // Afficher tous les détails d'une ressource
 
     // Gestion des ressources
     void addRessource(std::unique_ptr<Ressource> ressource);
