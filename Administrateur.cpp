@@ -15,8 +15,7 @@ void Administrateur::add(const std::string& type) {
     }
 
     std::string typeRessource = type;
-    
-    // Si aucun type n'est spécifié, demander à l'utilisateur
+
     if (typeRessource.empty()) {
         std::cout << "Types de ressources disponibles: livre, revue, cd, vhs, dvd\n";
         std::cout << "Entrez le type de ressource à ajouter: ";
@@ -24,22 +23,21 @@ void Administrateur::add(const std::string& type) {
     }
 
     std::cout << "[Admin] Ajout d'une ressource de type: " << typeRessource << "\n";
-    
-    // Demander les informations de base
+
     std::cout << "ID: ";
     int id;
     std::cin >> id;
     
     std::cout << "Titre: ";
     std::string titre;
-    std::cin.ignore(); // vider le buffer après la lecture de l'entier
+    std::cin.ignore();
     std::getline(std::cin, titre);
     
     std::cout << "Auteur: ";
     std::string auteur;
     std::getline(std::cin, auteur);
     
-    std::string etat = "Disponible"; // état par défaut
+    std::string etat = "Disponible";
     
     std::unique_ptr<Ressource> ressource;
     
@@ -135,26 +133,6 @@ void Administrateur::add(const std::string& type) {
     std::cout << "[Admin] Ressource ajoutée avec succès!\n";
 }
 
-void Administrateur::load(const std::string& filename) {
-    // La vraie logique est dans Mediatheque::loadFromFile
-    std::cout << "[Admin] Chargement des données depuis " << filename << "\n";
-}
-
-void Administrateur::save(const std::string& filename) {
-    // La vraie logique est dans Mediatheque::saveToFile
-    std::cout << "[Admin] Sauvegarde des données vers " << filename << "\n";
-}
-
-void Administrateur::clear() {
-    // La vraie logique est dans Mediatheque::clearSearchResults
-    std::cout << "[Admin] Effacement des résultats de recherche.\n";
-}
-
-void Administrateur::deleteById(int id) {
-    // La vraie logique est dans Mediatheque::deleteRessource
-    std::cout << "[Admin] Suppression de la ressource ID " << id << "\n";
-}
-
 void Administrateur::ajouterUtilisateur(const Utilisateur& u) {
     std::cout << "[Admin] ajouterUtilisateur(id=" << u.id
               << ", prenom=\"" << u.prenom << "\", nom=\"" << u.nom
@@ -163,11 +141,6 @@ void Administrateur::ajouterUtilisateur(const Utilisateur& u) {
 
 void Administrateur::supprimerUtilisateur(int id) {
     std::cout << "[Admin] supprimerUtilisateur(" << id << ") -> placeholder: retirerait un utilisateur.\n";
-}
-
-void Administrateur::reset() {
-    // La vraie logique est dans Mediatheque::resetRessources
-    std::cout << "[Admin] Remise à zéro de toutes les ressources.\n";
 }
 
 void Administrateur::listerUtilisateurs() {
