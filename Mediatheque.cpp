@@ -9,7 +9,6 @@
 #include "VHS.h"
 #include <iostream>
 #include <algorithm>
-#include <cctype>
 #include <sstream>
 #include <fstream>
 
@@ -55,8 +54,8 @@ void Mediatheque::dispatch() {
         std::string cmd;
         iss >> cmd;
         std::string arg;
-        std::getline(iss, arg);               // récupère le reste
-        if (!arg.empty() && arg[0] == ' ')    // trim espace initial
+        std::getline(iss, arg);
+        if (!arg.empty() && arg[0] == ' ')
             arg.erase(0, 1);
 
 
