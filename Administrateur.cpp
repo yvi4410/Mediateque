@@ -9,11 +9,6 @@
 #include <memory>
 
 void Administrateur::add(const std::string& type) {
-    if (!mediatheque) {
-        std::cout << "[Erreur] Pas de médiatèque configurée.\n";
-        return;
-    }
-
     std::string typeRessource = type;
     
     // Si aucun type n'est spécifié, demander à l'utilisateur
@@ -136,23 +131,19 @@ void Administrateur::add(const std::string& type) {
 }
 
 void Administrateur::load(const std::string& filename) {
-    // La vraie logique est dans Mediatheque::loadFromFile
-    std::cout << "[Admin] Chargement des données depuis " << filename << "\n";
+    mediatheque->loadFromFile(filename);
 }
 
 void Administrateur::save(const std::string& filename) {
-    // La vraie logique est dans Mediatheque::saveToFile
-    std::cout << "[Admin] Sauvegarde des données vers " << filename << "\n";
+    mediatheque->saveToFile(filename);
 }
 
 void Administrateur::clear() {
-    // La vraie logique est dans Mediatheque::clearSearchResults
-    std::cout << "[Admin] Effacement des résultats de recherche.\n";
+    mediatheque->clearSearchResults();
 }
 
 void Administrateur::deleteById(int id) {
-    // La vraie logique est dans Mediatheque::deleteRessource
-    std::cout << "[Admin] Suppression de la ressource ID " << id << "\n";
+    mediatheque->deleteRessource(id);
 }
 
 void Administrateur::ajouterUtilisateur(const Utilisateur& u) {
@@ -166,8 +157,7 @@ void Administrateur::supprimerUtilisateur(int id) {
 }
 
 void Administrateur::reset() {
-    // La vraie logique est dans Mediatheque::resetRessources
-    std::cout << "[Admin] Remise à zéro de toutes les ressources.\n";
+    mediatheque->resetRessources();
 }
 
 void Administrateur::listerUtilisateurs() {
