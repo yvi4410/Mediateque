@@ -261,19 +261,74 @@ void Mediatheque::searchRessources(const std::string& query) {
         return;
     }
     
-    // Recherche dans titre, auteur
+    // Recherche dans tous les attributs selon le type
+    std::string queryLower = query;
+    std::transform(queryLower.begin(), queryLower.end(), queryLower.begin(), ::tolower);
+    
     for (const auto& ressource : ressources) {
+        bool found = false;
+        
+        // Recherche dans les attributs de base
         std::string titre = ressource->getTitre();
         std::string auteur = ressource->getAuteur();
-        
-        // Conversion en minuscules pour recherche insensible à la casse
+        std::string etat = ressource->getEtat();
         std::transform(titre.begin(), titre.end(), titre.begin(), ::tolower);
         std::transform(auteur.begin(), auteur.end(), auteur.begin(), ::tolower);
-        std::string queryLower = query;
-        std::transform(queryLower.begin(), queryLower.end(), queryLower.begin(), ::tolower);
+        std::transform(etat.begin(), etat.end(), etat.begin(), ::tolower);
         
         if (titre.find(queryLower) != std::string::npos || 
-            auteur.find(queryLower) != std::string::npos) {
+            auteur.find(queryLower) != std::string::npos ||
+            etat.find(queryLower) != std::string::npos) {
+            found = true;
+        }
+        
+        // Recherche dans les attributs spécifiques selon le type
+        if (!found) {
+            if (auto livre = dynamic_cast<Livre*>(ressource.get())) {
+                std::string collection = livre->getCollection();
+                std::string resume = livre->getResume();
+                std::transform(collection.begin(), collection.end(), collection.begin(), ::tolower);
+                std::transform(resume.begin(), resume.end(), resume.begin(), ::tolower);
+                if (collection.find(queryLower) != std::string::npos ||
+                    resume.find(queryLower) != std::string::npos ||
+                    std::to_string(livre->getAnnee()).find(queryLower) != std::string::npos) {
+                    found = true;
+                }
+            } else if (auto cd = dynamic_cast<CD*>(ressource.get())) {
+                std::string maison = cd->getMaison();
+                std::transform(maison.begin(), maison.end(), maison.begin(), ::tolower);
+                if (maison.find(queryLower) != std::string::npos) {
+                    found = true;
+                }
+            } else if (auto revue = dynamic_cast<Revue*>(ressource.get())) {
+                std::string collection = revue->getCollection();
+                std::string resume = revue->getResume();
+                std::string editeur = revue->getEditeur();
+                std::transform(collection.begin(), collection.end(), collection.begin(), ::tolower);
+                std::transform(resume.begin(), resume.end(), resume.begin(), ::tolower);
+                std::transform(editeur.begin(), editeur.end(), editeur.begin(), ::tolower);
+                if (collection.find(queryLower) != std::string::npos ||
+                    resume.find(queryLower) != std::string::npos ||
+                    editeur.find(queryLower) != std::string::npos ||
+                    std::to_string(revue->getAnnee()).find(queryLower) != std::string::npos) {
+                    found = true;
+                }
+            } else if (auto dvd = dynamic_cast<DVD*>(ressource.get())) {
+                std::string maison = dvd->getMaison();
+                std::transform(maison.begin(), maison.end(), maison.begin(), ::tolower);
+                if (maison.find(queryLower) != std::string::npos) {
+                    found = true;
+                }
+            } else if (auto vhs = dynamic_cast<VHS*>(ressource.get())) {
+                std::string maison = vhs->getMaison();
+                std::transform(maison.begin(), maison.end(), maison.begin(), ::tolower);
+                if (maison.find(queryLower) != std::string::npos) {
+                    found = true;
+                }
+            }
+        }
+        
+        if (found) {
             searchResults.push_back(ressource.get());
         }
     }
