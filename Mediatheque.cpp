@@ -339,11 +339,7 @@ void Mediatheque::searchRessources(const std::string& query) {
     if (!searchResults.empty()) {
         std::cout << "=== Résultats de la recherche ===\n";
         for (const auto& ressource : searchResults) {
-            std::cout << "ID: " << ressource->getId() 
-                      << " | Type: " << ressource->getType()
-                      << " | Titre: " << ressource->getTitre()
-                      << " | Auteur: " << ressource->getAuteur()
-                      << " | Etat: " << ressource->getEtat() << "\n";
+            displayRessourceDetails(ressource);
         }
     }
 }
