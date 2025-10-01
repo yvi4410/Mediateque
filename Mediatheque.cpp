@@ -103,9 +103,11 @@ void Mediatheque::dispatch() {
             showCommands();
 
         } else if (cmd == "save") {
-            currentUser->save(arg);
-            if (dynamic_cast<Administrateur*>(currentUser.get())) {
+            if (auto admin = dynamic_cast<Administrateur*>(currentUser.get())) {
+                admin->save(arg);
                 saveToFile(arg);
+            } else {
+                std::cout << "[Erreur] Vous n'avez pas le droit de sauvegarder.\n";
             }
             showCommands();
 
@@ -115,39 +117,53 @@ void Mediatheque::dispatch() {
 
         } else if (cmd == "delete") {
             int id = arg.empty() ? -1 : std::stoi(arg);
-            currentUser->deleteById(id);
-            if (dynamic_cast<Administrateur*>(currentUser.get())) {
+            if (auto admin = dynamic_cast<Administrateur*>(currentUser.get())) {
+                admin->deleteById(id);
                 deleteRessource(id);
+            } else {
+                std::cout << "[Erreur] Vous n'avez pas le droit de supprimer.\n";
             }
             showCommands();
 
         } else if (cmd == "ajouterutilisateur") {
-            std::istringstream as(arg);
-            int id; std::string prenom, nom;
-            if (!(as >> id >> prenom >> nom)) {
-                std::cout << "Usage: ajouterUtilisateur <id> <prenom> <nom>\n";
+            if (auto admin = dynamic_cast<Administrateur*>(currentUser.get())) {
+                std::istringstream as(arg);
+                int id; std::string prenom, nom;
+                if (!(as >> id >> prenom >> nom)) {
+                    std::cout << "Usage: ajouterUtilisateur <id> <prenom> <nom>\n";
+                } else {
+                    Utilisateur u(id, prenom, nom);
+                    admin->ajouterUtilisateur(u);
+                }
             } else {
-                Utilisateur u(id, prenom, nom);
-                currentUser->ajouterUtilisateur(u);
+                std::cout << "[Erreur] Vous n'avez pas le droit d'ajouter un utilisateur.\n";
             }
             showCommands();
 
         } else if (cmd == "supprimerutilisateur") {
-            {
+            if (auto admin = dynamic_cast<Administrateur*>(currentUser.get())) {
                 int id = arg.empty() ? -1 : std::stoi(arg);
-                currentUser->supprimerUtilisateur(id);
+                admin->supprimerUtilisateur(id);
+            } else {
+                std::cout << "[Erreur] Vous n'avez pas le droit de supprimer un utilisateur.\n";
             }
             showCommands();
 
         } else if (cmd == "reset") {
-            currentUser->reset();
-            if (dynamic_cast<Administrateur*>(currentUser.get())) {
+            if (auto admin = dynamic_cast<Administrateur*>(currentUser.get())) {
+                admin->reset();
                 resetRessources();
+            } else {
+                std::cout << "[Erreur] Vous n'avez pas le droit de remettre à zéro.\n";
             }
             showCommands();
 
         } else if (cmd == "listerutilisateurs") {
-            currentUser->listerUtilisateurs();
+            if (auto admin = dynamic_cast<Administrateur*>(currentUser.get())) {
+                admin->listerUtilisateurs();
+            } else {
+                std::cout << "[Erreur] Vous n'avez pas le droit de lister les utilisateurs.\n";
+            }
             showCommands();
         } else {
             std::cout << "Commande inconnue.\n";

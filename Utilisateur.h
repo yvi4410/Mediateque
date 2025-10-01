@@ -22,24 +22,11 @@ public:
     // Référence vers la médiatèque
     void setMediatheque(Mediatheque* media) { mediatheque = media; }
 
-    // Méthodes du diagramme (placeholders) - déclarations seulement
+    // Méthodes du diagramme - déclarations seulement
     virtual void add(const std::string& type);
-    virtual void list();
-    virtual void search(const std::string& q);
-    virtual void show(int idRessource);
     virtual void borrow(int idRessource);
     virtual void showBorrow(); // Afficher les emprunts
-
-    // Commandes réservées aux administrateurs mais exposées polimorphiquement
-    // Par défaut l'utilisateur n'a pas le droit — les administrateurs override.
-    virtual void load(const std::string& filename);
-    virtual void save(const std::string& filename);
-    virtual void clear();
-    virtual void deleteById(int id);
-    virtual void ajouterUtilisateur(const Utilisateur& u);
-    virtual void supprimerUtilisateur(int id);
-    virtual void reset();
-    virtual void listerUtilisateurs();
+    virtual void load(const std::string& filename); // Accessible aux clients et admins
 
 protected:
     Mediatheque* mediatheque = nullptr;
