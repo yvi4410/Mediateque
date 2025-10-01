@@ -48,10 +48,6 @@ void Mediatheque::showCommands() const {
 void Mediatheque::dispatch() {
     std::string line;
     showCommands(); 
-    // Assurer un utilisateur par défaut pour éviter de vérifier currentUser partout
-    if (!currentUser) {
-        setCurrentUser(std::make_unique<Client>());
-    }
 
     while (true) {
         std::cout << "\n> ";
@@ -185,7 +181,7 @@ void Mediatheque::displayRessourceDetails(const Ressource* ressource) const {
     
     // Affichage des détails spécifiques selon le type
     std::string type = ressource->getType();
-    // utiliser le type tel quel (ex: "Livre", "CD")
+    std::transform(type.begin(), type.end(), type.begin(), ::tolower);
 
     if (type == "livre") {
         const Livre* livre = dynamic_cast<const Livre*>(ressource);
