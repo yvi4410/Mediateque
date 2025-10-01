@@ -1,3 +1,12 @@
+/*
+class Ressource {
+    +id: int
+    +titre: string
+    +auteur: string
+    +etat: string
+}
+*/
+
 #pragma once
 #include <string>
 
@@ -11,8 +20,7 @@ protected:
 
 public:
     Ressource(int id, std::string titre, std::string auteur, std::string etat);
-
-    virtual ~Ressource();
+    virtual ~Ressource() = default;
 
     int getId() const;
 

@@ -1,3 +1,9 @@
+/*
+class CD {
+    +nbPistes: int
+}
+*/
+
 #pragma once
 #include "RessourceDigitaleAV.h"
 

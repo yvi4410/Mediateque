@@ -1,3 +1,11 @@
+#/*
+#class RessourceNumeriqueFichier {
+#    +type: string
+#    +taille: int
+#    +url: string
+#}
+#*/
+
 #include "RessourceNumeriqueFichier.h"
 
 RessourceNumeriqueFichier::RessourceNumeriqueFichier(int id, std::string titre, std::string auteur, std::string etat,

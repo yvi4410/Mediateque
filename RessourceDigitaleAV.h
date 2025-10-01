@@ -1,3 +1,10 @@
+/*
+class RessourceDigitaleAV {
+    +duree: int
+    +maisonProduction: string
+}
+*/
+
 #pragma once
 #include "Ressource.h"
 

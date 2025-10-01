@@ -1,3 +1,9 @@
+/*
+class Livre {
+    // specialization of RessourcePapier
+}
+*/
+
 #pragma once
 #include <string>
 #include "RessourcePapier.h"

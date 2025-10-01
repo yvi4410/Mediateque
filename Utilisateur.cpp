@@ -1,68 +1,101 @@
 #include "Utilisateur.h"
 #include "Mediatheque.h"
-#include "Ressource.h"  
 #include <iostream>
 
-Utilisateur::Utilisateur(int id, const std::string& prenom, const std::string& nom)
-    : id(id), prenom(prenom), nom(nom) {}
-
-void Utilisateur::bye() {
-    std::cout << "Au revoir !" << std::endl;
+void Utilisateur::add(const std::string& type) {
+	std::cout << "[Erreur] Vous n'avez pas le droit d'ajouter une ressource (type=" << type << ").\n";
 }
 
-void Utilisateur::list(const Mediatheque& mediatheque) {
-    const auto& ressources = mediatheque.getRessources();
-
-    if (ressources.empty()) {
-        std::cout << "(Aucune ressource disponible)" << std::endl;
-        return;
-    }
-
-    std::cout << "Liste des ressources disponibles :" << std::endl;
-    for (const auto& ressource : ressources) {
-        std::cout << " - " << ressource->getTitre() << std::endl;
-    }
+void Utilisateur::list() {
+	// Cette méthode n'est plus utilisée - voir Mediatheque::listRessources()
+	std::cout << "[Info] Utilisation de la commande 'list' directement.\n";
 }
 
 void Utilisateur::search(const std::string& q) {
-    std::cout << "search(" << q << ")" << std::endl;
+	// Cette méthode n'est plus utilisée - voir Mediatheque::searchRessources()
+	std::cout << "[Info] Utilisation de la commande 'search' directement.\n";
 }
 
-void Utilisateur::show(int id) {
-    std::cout << "show(" << id << ")" << std::endl;
+void Utilisateur::show(int idRessource) {
+	// Cette méthode n'est plus utilisée - voir Mediatheque::showRessource()
+	std::cout << "[Info] Utilisation de la commande 'show' directement.\n";
 }
 
-void Utilisateur::borrow(Mediatheque& mediatheque, int id) {
-    // --- (3a) Vérifier si la ressource existe encore dans la médiathèque ---
-    const auto& ressources = mediatheque.getRessources(); // lecture seule ok
-    bool trouve = false;
-    for (const auto& r : ressources) {
-        // Hypothèse simple : Ressource a getId(); sinon adapte le nom de l'accesseur
-        if (r->getId() == id) {
-            trouve = true;
-            break;
-        }
-    }
-    if (!trouve) {
-        std::cout << "[borrow] Ressource " << id << " introuvable dans la médiathèque." << std::endl;
-        return;
-    }
+void Utilisateur::borrow(int idRessource) {
+	if (!mediatheque) {
+		std::cout << "[Erreur] Pas de médiatèque configurée.\n";
+		return;
+	}
 
-    // --- (3b) Éviter les doublons côté utilisateur ---
-    for (int borrowedId : emprunts) {
-        if (borrowedId == id) {
-            std::cout << "[borrow] Ressource " << id << " déjà empruntée par cet utilisateur." << std::endl;
-            return;
-        }
-    }
+	std::cout << "[Utilisateur] Tentative d'emprunt de la ressource ID " << idRessource << "\n";
+	
+	Ressource* ressource = mediatheque->findRessource(idRessource);
+	if (!ressource) {
+		std::cout << "[Erreur] Ressource avec ID " << idRessource << " introuvable.\n";
+		return;
+	}
+	
+	if (mediatheque->borrowRessource(idRessource)) {
+		emprunts.push_back(idRessource);
+		std::cout << "[Utilisateur] Emprunt réussi ! Ressource '" << ressource->getTitre() << "' empruntée.\n";
+		std::cout << "[Info] Vous avez maintenant " << emprunts.size() << " emprunt(s).\n";
+	} else {
+		std::cout << "[Erreur] Cette ressource est déjà empruntée et non disponible.\n";
+	}
+}
 
-    // --- (3c) Ajouter dans la liste d'emprunts de l'utilisateur ---
-    emprunts.push_back(id);
+void Utilisateur::showBorrow() {
+	if (emprunts.empty()) {
+		std::cout << "Aucun emprunt en cours.\n";
+		return;
+	}
+	
+	std::cout << "=== Vos emprunts ===\n";
+	for (int id : emprunts) {
+		Ressource* ressource = mediatheque->findRessource(id);
+		if (ressource) {
+			std::cout << "ID: " << ressource->getId() 
+			          << " | Type: " << ressource->getType()
+			          << " | Titre: " << ressource->getTitre()
+			          << " | Auteur: " << ressource->getAuteur()
+			          << " | Etat: " << ressource->getEtat() << "\n";
+		} else {
+			std::cout << "- Ressource ID: " << id << " (introuvable)\n";
+		}
+	}
+	std::cout << "Total: " << emprunts.size() << " emprunt(s)\n";
+}
 
-    // --- (3d) Retirer la ressource de la médiathèque ---
-    mediatheque.deleteResource(id);
+// Admin commands - par défaut l'utilisateur ordinaire n'a pas les droits
+void Utilisateur::load(const std::string&) {
+	// Maintenant permis - la vraie logique est dans Mediatheque::loadFromFile
+	std::cout << "[Utilisateur] Chargement des données autorisé.\n";
+}
 
-    // --- (3e) Feedback simple ---
-    std::cout << "[borrow] OK : l'utilisateur " << this->id
-              << " a emprunté la ressource " << id << "." << std::endl;
+void Utilisateur::save(const std::string&) {
+	std::cout << "[Erreur] Vous n'avez pas le droit de sauvegarder des données.\n";
+}
+
+void Utilisateur::clear() {
+	std::cout << "[Erreur] Vous n'avez pas le droit de vider les données.\n";
+}
+
+void Utilisateur::deleteById(int) {
+	std::cout << "[Erreur] Vous n'avez pas le droit de supprimer une ressource.\n";
+}
+
+void Utilisateur::ajouterUtilisateur(const Utilisateur&) {
+	std::cout << "[Erreur] Vous n'avez pas le droit d'ajouter un utilisateur.\n";
+}
+
+void Utilisateur::supprimerUtilisateur(int) {
+	std::cout << "[Erreur] Vous n'avez pas le droit de supprimer un utilisateur.\n";
+}
+
+void Utilisateur::reset() {
+	std::cout << "[Erreur] Vous n'avez pas le droit de remettre à zéro.\n";
+}
+
+void Utilisateur::listerUtilisateurs() {
+	std::cout << "[Erreur] Vous n'avez pas le droit de lister les utilisateurs.\n";
 }

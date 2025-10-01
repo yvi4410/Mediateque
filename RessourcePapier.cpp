@@ -1,3 +1,12 @@
+#/*
+#class RessourcePapier {
+#    +annee: int
+#    +nbPages: int
+#    +collection: string
+#    +resume: string
+#}
+#*/
+
 #include "RessourcePapier.h"
 
 RessourcePapier::RessourcePapier(int id, std::string titre, std::string auteur, std::string etat,

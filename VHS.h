@@ -1,3 +1,9 @@
+/*
+class VHS {
+    // inherits from RessourceDigitaleAV
+}
+*/
+
 #pragma once
 #include "RessourceDigitaleAV.h"
 

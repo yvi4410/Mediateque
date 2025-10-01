@@ -1,3 +1,9 @@
+#/*
+#class VHS {
+#    // inherits from RessourceDigitaleAV
+#}
+#*/
+
 #include "VHS.h"
 
 VHS::VHS(int id, std::string titre, std::string auteur, std::string etat,

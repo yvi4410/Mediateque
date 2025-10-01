@@ -1,30 +1,38 @@
 #pragma once
+#include <memory>
 #include <string>
 #include <vector>
-#include <memory>
 #include "Ressource.h"
-#include "Utilisateur.h"
 
-class Ressource;
+class Utilisateur;
 
 class Mediatheque {
+public:
+    Mediatheque() = default;
+
+    void setCurrentUser(std::unique_ptr<Utilisateur> user);
+    Utilisateur* getCurrentUser() const;
+
+    // Boucle d'interface simple
+    void dispatch();
+    void showCommands() const; // Afficher les commandes disponibles
+    void displayRessourceDetails(const Ressource* ressource) const; // Afficher tous les détails d'une ressource
+
+    // Gestion des ressources
+    void addRessource(std::unique_ptr<Ressource> ressource);
+    void listRessources() const;
+    void searchRessources(const std::string& query);
+    void clearSearchResults();
+    void showRessource(int id) const;
+    void deleteRessource(int id);
+    void resetRessources();
+    void loadFromFile(const std::string& filename);
+    void saveToFile(const std::string& filename) const;
+    bool borrowRessource(int id); // Emprunter une ressource (change l'état)
+    Ressource* findRessource(int id) const; // Trouver une ressource par ID
+    std::vector<Ressource*> searchResults;
 
 private:
+    std::unique_ptr<Utilisateur> currentUser;
     std::vector<std::unique_ptr<Ressource>> ressources;
-    std::vector<std::unique_ptr<Utilisateur>> utilisateurs;
-
-public:
-    virtual ~Mediatheque() = default;
-    void dispatch();
-    void bye();
-    void add(const std::string& type);
-    void load(const std::string& filename);
-    void save(const std::string& filename);
-    void search(const std::string& chaine);
-    void clear();
-    void list();
-    void show(int id);
-    void deleteResource(int id);
-    void reset();
-    const std::vector<std::unique_ptr<Ressource>>& getRessources() const;
 };

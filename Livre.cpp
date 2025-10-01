@@ -1,3 +1,9 @@
+#/*
+#class Livre {
+#    // specialization of RessourcePapier
+#}
+#*/
+
 #include "Livre.h"
 
 Livre::Livre(int id, std::string titre, std::string auteur, std::string etat,

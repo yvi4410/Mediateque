@@ -1,3 +1,12 @@
+/*
+class RessourcePapier {
+    +annee: int
+    +nbPages: int
+    +collection: string
+    +resume: string
+}
+*/
+
 #pragma once
 #include <string>
 #include "Ressource.h"
