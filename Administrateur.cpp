@@ -1,10 +1,10 @@
 #include "Administrateur.h"
 #include "Mediatheque.h"
 #include "Livre.h"
+#include "Revue.h"
 #include "CD.h"
 #include "DVD.h"
 #include "VHS.h"
-#include "Revue.h"
 #include <iostream>
 #include <memory>
 
@@ -18,7 +18,7 @@ void Administrateur::add(const std::string& type) {
     
     // Si aucun type n'est spécifié, demander à l'utilisateur
     if (typeRessource.empty()) {
-        std::cout << "Types de ressources disponibles: livre, cd\n";
+        std::cout << "Types de ressources disponibles: livre, revue, cd, vhs, dvd\n";
         std::cout << "Entrez le type de ressource à ajouter: ";
         std::getline(std::cin, typeRessource);
     }
@@ -74,9 +74,60 @@ void Administrateur::add(const std::string& type) {
         
         ressource = std::make_unique<CD>(id, titre, auteur, etat, duree, maison, nbPistes);
         
+    } else if (typeRessource == "revue") {
+        std::cout << "Année: ";
+        int annee;
+        std::cin >> annee;
+        std::cout << "Nombre de pages: ";
+        int nbPages;
+        std::cin >> nbPages;
+        std::cin.ignore();
+        std::cout << "Collection: ";
+        std::string collection;
+        std::getline(std::cin, collection);
+        std::cout << "Résumé: ";
+        std::string resume;
+        std::getline(std::cin, resume);
+        std::cout << "Éditeur: ";
+        std::string editeur;
+        std::getline(std::cin, editeur);
+        std::cout << "Nombre d'articles: ";
+        int nbArticles;
+        std::cin >> nbArticles;
+        
+        // Pour simplifier, on crée un vecteur d'articles vide
+        std::vector<std::string> articles;
+        
+        ressource = std::make_unique<Revue>(id, titre, auteur, etat, annee, nbPages, collection, resume, editeur, articles);
+        
+    } else if (typeRessource == "dvd") {
+        std::cout << "Durée (en minutes): ";
+        int duree;
+        std::cin >> duree;
+        std::cin.ignore();
+        std::cout << "Maison de production: ";
+        std::string maison;
+        std::getline(std::cin, maison);
+        std::cout << "Nombre de chapitres: ";
+        int nbChapitres;
+        std::cin >> nbChapitres;
+        
+        ressource = std::make_unique<DVD>(id, titre, auteur, etat, duree, maison, nbChapitres);
+        
+    } else if (typeRessource == "vhs") {
+        std::cout << "Durée (en minutes): ";
+        int duree;
+        std::cin >> duree;
+        std::cin.ignore();
+        std::cout << "Maison de production: ";
+        std::string maison;
+        std::getline(std::cin, maison);
+        
+        ressource = std::make_unique<VHS>(id, titre, auteur, etat, duree, maison);
+        
     } else {
         std::cout << "[Erreur] Type de ressource non supporté: " << typeRessource << "\n";
-        std::cout << "Types disponibles: livre, cd\n";
+        std::cout << "Types disponibles: livre, revue, cd, dvd, vhs\n";
         return;
     }
     

@@ -3,10 +3,10 @@
 #include "Administrateur.h"
 #include "Ressource.h"
 #include "Livre.h"
+#include "Revue.h"
 #include "CD.h"
 #include "DVD.h"
 #include "VHS.h"
-#include "Revue.h"
 #include <iostream>
 #include <algorithm>
 #include <cctype>
@@ -356,6 +356,35 @@ void Mediatheque::loadFromFile(const std::string& filename) {
                 ressources.push_back(std::move(cd));
                 count++;
             }
+        } else if (type == "revue") {
+            int id, annee, nbPages, nbArticles;
+            std::string titre, auteur, etat, collection, resume, editeur;
+            
+            if (iss >> id >> titre >> auteur >> etat >> annee >> nbPages >> collection >> resume >> editeur >> nbArticles) {
+                // Pour simplifier, on crée un vecteur d'articles vide
+                std::vector<std::string> articles;
+                auto revue = std::make_unique<Revue>(id, titre, auteur, etat, annee, nbPages, collection, resume, editeur, articles);
+                ressources.push_back(std::move(revue));
+                count++;
+            }
+        } else if (type == "dvd") {
+            int id, duree, nbChapitres;
+            std::string titre, auteur, etat, maison;
+            
+            if (iss >> id >> titre >> auteur >> etat >> duree >> maison >> nbChapitres) {
+                auto dvd = std::make_unique<DVD>(id, titre, auteur, etat, duree, maison, nbChapitres);
+                ressources.push_back(std::move(dvd));
+                count++;
+            }
+        } else if (type == "vhs") {
+            int id, duree;
+            std::string titre, auteur, etat, maison;
+            
+            if (iss >> id >> titre >> auteur >> etat >> duree >> maison) {
+                auto vhs = std::make_unique<VHS>(id, titre, auteur, etat, duree, maison);
+                ressources.push_back(std::move(vhs));
+                count++;
+            }
         }
     }
     
@@ -382,10 +411,15 @@ void Mediatheque::saveToFile(const std::string& filename) const {
         
         // Ajouter des détails spécifiques selon le type
         if (type == "livre") {
-            // Pour l'instant, sauvegarde basique
             file << " 2023 100 Collection Resume";
         } else if (type == "cd") {
             file << " 60 MaisonProd 12";
+        } else if (type == "revue") {
+            file << " 2023 100 Collection Resume Editeur 5";
+        } else if (type == "dvd") {
+            file << " 60 MaisonProd 8";
+        } else if (type == "vhs") {
+            file << " 60 MaisonProd";
         }
         
         file << "\n";
