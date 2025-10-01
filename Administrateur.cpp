@@ -10,8 +10,7 @@
 
 void Administrateur::add(const std::string& type) {
     std::string typeRessource = type;
-    
-    // Si aucun type n'est spécifié, demander à l'utilisateur
+
     if (typeRessource.empty()) {
         std::cout << "Types de ressources disponibles: livre, revue, cd, vhs, dvd\n";
         std::cout << "Entrez le type de ressource à ajouter: ";
@@ -19,22 +18,21 @@ void Administrateur::add(const std::string& type) {
     }
 
     std::cout << "[Admin] Ajout d'une ressource de type: " << typeRessource << "\n";
-    
-    // Demander les informations de base
+
     std::cout << "ID: ";
     int id;
     std::cin >> id;
     
     std::cout << "Titre: ";
     std::string titre;
-    std::cin.ignore(); // vider le buffer après la lecture de l'entier
+    std::cin.ignore();
     std::getline(std::cin, titre);
     
     std::cout << "Auteur: ";
     std::string auteur;
     std::getline(std::cin, auteur);
     
-    std::string etat = "Disponible"; // état par défaut
+    std::string etat = "Disponible";
     
     std::unique_ptr<Ressource> ressource;
     
@@ -146,20 +144,6 @@ void Administrateur::deleteById(int id) {
     mediatheque->deleteRessource(id);
 }
 
-void Administrateur::ajouterUtilisateur(const Utilisateur& u) {
-    std::cout << "[Admin] ajouterUtilisateur(id=" << u.id
-              << ", prenom=\"" << u.prenom << "\", nom=\"" << u.nom
-              << "\") -> placeholder: ajouterait un utilisateur.\n";
-}
-
-void Administrateur::supprimerUtilisateur(int id) {
-    std::cout << "[Admin] supprimerUtilisateur(" << id << ") -> placeholder: retirerait un utilisateur.\n";
-}
-
 void Administrateur::reset() {
     mediatheque->resetRessources();
-}
-
-void Administrateur::listerUtilisateurs() {
-    std::cout << "[Admin] listerUtilisateurs() -> placeholder: afficherait la liste des utilisateurs.\n";
 }
