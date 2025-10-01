@@ -6,7 +6,13 @@ public:
     ~Administrateur() override = default;
 
     void add(const std::string& type) override;
-    void ajouterUtilisateur(const Utilisateur& u);
-    void supprimerUtilisateur(int id);
-    void listerUtilisateurs();
+
+    void load(const std::string& filename) override;
+    void save(const std::string& filename) override;
+    void clear() override;
+    void deleteById(int id) override;
+    void ajouterUtilisateur(const Utilisateur& u) override;
+    void supprimerUtilisateur(int id) override;
+    void reset() override;
+    void listerUtilisateurs() override;
 };

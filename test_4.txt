@@ -1,0 +1,5 @@
+livre 1 LeHobbit Tolkien Disponible 1937 310 Fantastique UnAventureEpique
+cd 2 DarkSideOfTheMoon PinkFloyd Disponible 43 HarvestRecords 10
+revue 3 ScienceEtVie Redaction Disponible 2023 80 Magazine Sciences Bayard 0
+dvd 4 Titanic JamesCameron Disponible 195 Paramount 12
+vhs 5 StarWars GeorgeLucas Disponible 121 Fox

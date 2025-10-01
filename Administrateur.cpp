@@ -9,11 +9,6 @@
 #include <memory>
 
 void Administrateur::add(const std::string& type) {
-    if (!mediatheque) {
-        std::cout << "[Erreur] Pas de médiatèque configurée.\n";
-        return;
-    }
-
     std::string typeRessource = type;
 
     if (typeRessource.empty()) {
@@ -133,16 +128,22 @@ void Administrateur::add(const std::string& type) {
     std::cout << "[Admin] Ressource ajoutée avec succès!\n";
 }
 
-void Administrateur::ajouterUtilisateur(const Utilisateur& u) {
-    std::cout << "[Admin] ajouterUtilisateur(id=" << u.id
-              << ", prenom=\"" << u.prenom << "\", nom=\"" << u.nom
-              << "\") -> placeholder: ajouterait un utilisateur.\n";
+void Administrateur::load(const std::string& filename) {
+    mediatheque->loadFromFile(filename);
 }
 
-void Administrateur::supprimerUtilisateur(int id) {
-    std::cout << "[Admin] supprimerUtilisateur(" << id << ") -> placeholder: retirerait un utilisateur.\n";
+void Administrateur::save(const std::string& filename) {
+    mediatheque->saveToFile(filename);
 }
 
-void Administrateur::listerUtilisateurs() {
-    std::cout << "[Admin] listerUtilisateurs() -> placeholder: afficherait la liste des utilisateurs.\n";
+void Administrateur::clear() {
+    mediatheque->clearSearchResults();
+}
+
+void Administrateur::deleteById(int id) {
+    mediatheque->deleteRessource(id);
+}
+
+void Administrateur::reset() {
+    mediatheque->resetRessources();
 }

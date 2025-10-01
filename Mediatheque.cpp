@@ -1,6 +1,7 @@
 #include "Mediatheque.h"
 #include "Utilisateur.h"
 #include "Administrateur.h"
+#include "Client.h"
 #include "Ressource.h"
 #include "Livre.h"
 #include "Revue.h"
@@ -11,6 +12,8 @@
 #include <algorithm>
 #include <sstream>
 #include <fstream>
+
+// (Simplifié) : on conserve la casse telle quelle, pas de normalisation
 
 void Mediatheque::setCurrentUser(std::unique_ptr<Utilisateur> user) {
     currentUser = std::move(user);
@@ -44,6 +47,10 @@ void Mediatheque::showCommands() const {
 void Mediatheque::dispatch() {
     std::string line;
     showCommands(); 
+    // Assurer un utilisateur par défaut pour éviter de vérifier currentUser partout
+    if (!currentUser) {
+        setCurrentUser(std::make_unique<Client>());
+    }
 
     while (true) {
         std::cout << "\n> ";
@@ -64,8 +71,7 @@ void Mediatheque::dispatch() {
             break;
 
         } else if (cmd == "add") {
-            if (currentUser) currentUser->add(arg);
-            else std::cout << "[Erreur] Aucun utilisateur connecté.\n";
+            currentUser->add(arg);
             showCommands();
 
         } else if (cmd == "list") {
@@ -83,31 +89,22 @@ void Mediatheque::dispatch() {
 
         } else if (cmd == "borrow") {
             int idR = arg.empty() ? -1 : std::stoi(arg);
-            if (currentUser) currentUser->borrow(idR);
-            else std::cout << "[Erreur] Aucun utilisateur connecté.\n";
+            currentUser->borrow(idR);
             showCommands();
 
         } else if (cmd == "showborrow") {
-            if (currentUser) currentUser->showBorrow();
-            else std::cout << "[Erreur] Aucun utilisateur connecté.\n";
+            currentUser->showBorrow();
             showCommands();
 
         } else if (cmd == "load") {
-            if (!currentUser) { 
-                std::cout << "[Erreur] Aucun utilisateur connecté.\n"; 
-            } else {
-                loadFromFile(arg);
-            }
+            // Chargement accessible (implémentation dans Mediatheque)
+            loadFromFile(arg);
             showCommands();
 
         } else if (cmd == "save") {
-            if (!currentUser) { 
-                std::cout << "[Erreur] Aucun utilisateur connecté.\n"; 
-            } else {
-                currentUser->save(arg);
-                if (dynamic_cast<Administrateur*>(currentUser.get())) {
-                    saveToFile(arg);
-                }
+            currentUser->save(arg);
+            if (dynamic_cast<Administrateur*>(currentUser.get())) {
+                saveToFile(arg);
             }
             showCommands();
 
@@ -116,53 +113,40 @@ void Mediatheque::dispatch() {
             showCommands();
 
         } else if (cmd == "delete") {
-            if (!currentUser) { 
-                std::cout << "[Erreur] Aucun utilisateur connecté.\n"; 
-            } else {
-                int id = arg.empty() ? -1 : std::stoi(arg);
-                currentUser->deleteById(id);
-                if (dynamic_cast<Administrateur*>(currentUser.get())) {
-                    deleteRessource(id);
-                }
+            int id = arg.empty() ? -1 : std::stoi(arg);
+            currentUser->deleteById(id);
+            if (dynamic_cast<Administrateur*>(currentUser.get())) {
+                deleteRessource(id);
             }
             showCommands();
 
         } else if (cmd == "ajouterutilisateur") {
-            if (!currentUser) { std::cout << "[Erreur] Aucun utilisateur connecté.\n"; }
-            else {
-                std::istringstream as(arg);
-                int id; std::string prenom, nom;
-                if (!(as >> id >> prenom >> nom)) {
-                    std::cout << "Usage: ajouterUtilisateur <id> <prenom> <nom>\n";
-                } else {
-                    Utilisateur u(id, prenom, nom);
-                    currentUser->ajouterUtilisateur(u);
-                }
+            std::istringstream as(arg);
+            int id; std::string prenom, nom;
+            if (!(as >> id >> prenom >> nom)) {
+                std::cout << "Usage: ajouterUtilisateur <id> <prenom> <nom>\n";
+            } else {
+                Utilisateur u(id, prenom, nom);
+                currentUser->ajouterUtilisateur(u);
             }
             showCommands();
 
         } else if (cmd == "supprimerutilisateur") {
-            if (!currentUser) { std::cout << "[Erreur] Aucun utilisateur connecté.\n"; }
-            else {
+            {
                 int id = arg.empty() ? -1 : std::stoi(arg);
                 currentUser->supprimerUtilisateur(id);
             }
             showCommands();
 
         } else if (cmd == "reset") {
-            if (!currentUser) { 
-                std::cout << "[Erreur] Aucun utilisateur connecté.\n"; 
-            } else {
-                currentUser->reset();
-                if (dynamic_cast<Administrateur*>(currentUser.get())) {
-                    resetRessources();
-                }
+            currentUser->reset();
+            if (dynamic_cast<Administrateur*>(currentUser.get())) {
+                resetRessources();
             }
             showCommands();
 
         } else if (cmd == "listerutilisateurs") {
-            if (!currentUser) { std::cout << "[Erreur] Aucun utilisateur connecté.\n"; }
-            else currentUser->listerUtilisateurs();
+            currentUser->listerUtilisateurs();
             showCommands();
         } else {
             std::cout << "Commande inconnue.\n";
@@ -184,8 +168,8 @@ void Mediatheque::displayRessourceDetails(const Ressource* ressource) const {
     
     // Affichage des détails spécifiques selon le type
     std::string type = ressource->getType();
-    std::transform(type.begin(), type.end(), type.begin(), ::tolower);
-    
+    // utiliser le type tel quel (ex: "Livre", "CD")
+
     if (type == "livre") {
         const Livre* livre = dynamic_cast<const Livre*>(ressource);
         if (livre) {
@@ -260,19 +244,69 @@ void Mediatheque::searchRessources(const std::string& query) {
         return;
     }
     
-    // Recherche dans titre, auteur
+    // Recherche dans tous les attributs selon le type
+    // Recherche sensible à la casse (on utilise la query fournie)
+    std::string queryStr = query;
+    
     for (const auto& ressource : ressources) {
+        bool found = false;
+        
+        // Recherche dans les attributs de base
         std::string titre = ressource->getTitre();
         std::string auteur = ressource->getAuteur();
+        std::string etat = ressource->getEtat();
+    // recherche sensible à la casse : on garde titre/auteur/etat comme fournis
         
-        // Conversion en minuscules pour recherche insensible à la casse
-        std::transform(titre.begin(), titre.end(), titre.begin(), ::tolower);
-        std::transform(auteur.begin(), auteur.end(), auteur.begin(), ::tolower);
-        std::string queryLower = query;
-        std::transform(queryLower.begin(), queryLower.end(), queryLower.begin(), ::tolower);
+        if (titre.find(queryStr) != std::string::npos || 
+            auteur.find(queryStr) != std::string::npos ||
+            etat.find(queryStr) != std::string::npos) {
+            found = true;
+        }
         
-        if (titre.find(queryLower) != std::string::npos || 
-            auteur.find(queryLower) != std::string::npos) {
+        // Recherche dans les attributs spécifiques selon le type
+        if (!found) {
+            if (auto livre = dynamic_cast<Livre*>(ressource.get())) {
+                std::string collection = livre->getCollection();
+                std::string resume = livre->getResume();
+                // garder collection/resume tels quels
+                if (collection.find(queryStr) != std::string::npos ||
+                    resume.find(queryStr) != std::string::npos ||
+                    std::to_string(livre->getAnnee()).find(queryStr) != std::string::npos) {
+                    found = true;
+                }
+            } else if (auto cd = dynamic_cast<CD*>(ressource.get())) {
+                std::string maison = cd->getMaison();
+                // garder maison tel quel
+                if (maison.find(queryStr) != std::string::npos) {
+                    found = true;
+                }
+            } else if (auto revue = dynamic_cast<Revue*>(ressource.get())) {
+                std::string collection = revue->getCollection();
+                std::string resume = revue->getResume();
+                std::string editeur = revue->getEditeur();
+                // garder collection/resume/editeur tels quels
+                if (collection.find(queryStr) != std::string::npos ||
+                    resume.find(queryStr) != std::string::npos ||
+                    editeur.find(queryStr) != std::string::npos ||
+                    std::to_string(revue->getAnnee()).find(queryStr) != std::string::npos) {
+                    found = true;
+                }
+            } else if (auto dvd = dynamic_cast<DVD*>(ressource.get())) {
+                std::string maison = dvd->getMaison();
+                // garder maison tel quel
+                if (maison.find(queryStr) != std::string::npos) {
+                    found = true;
+                }
+            } else if (auto vhs = dynamic_cast<VHS*>(ressource.get())) {
+                std::string maison = vhs->getMaison();
+                // garder maison tel quel
+                if (maison.find(queryStr) != std::string::npos) {
+                    found = true;
+                }
+            }
+        }
+        
+        if (found) {
             searchResults.push_back(ressource.get());
         }
     }
@@ -283,11 +317,7 @@ void Mediatheque::searchRessources(const std::string& query) {
     if (!searchResults.empty()) {
         std::cout << "=== Résultats de la recherche ===\n";
         for (const auto& ressource : searchResults) {
-            std::cout << "ID: " << ressource->getId() 
-                      << " | Type: " << ressource->getType()
-                      << " | Titre: " << ressource->getTitre()
-                      << " | Auteur: " << ressource->getAuteur()
-                      << " | Etat: " << ressource->getEtat() << "\n";
+            displayRessourceDetails(ressource);
         }
     }
 }
@@ -369,8 +399,8 @@ void Mediatheque::loadFromFile(const std::string& filename) {
         std::string type;
         iss >> type;
         
-        // Rendre la reconnaissance de type insensible à la casse
-        std::transform(type.begin(), type.end(), type.begin(), ::tolower);
+        // On utilise le type tel quel dans le fichier (ex: "livre" ou "Livre")
+        // Si nécessaire, le fichier doit contenir les types exacts correspondants.
         
         if (type == "livre") {
             int id, annee, nbPages;
@@ -435,9 +465,8 @@ void Mediatheque::saveToFile(const std::string& filename) const {
     
     for (const auto& ressource : ressources) {
         std::string type = ressource->getType();
-        std::transform(type.begin(), type.end(), type.begin(), ::tolower);
-        
-        file << type << " " 
+    // écrire le type tel quel
+    file << type << " " 
              << ressource->getId() << " "
              << ressource->getTitre() << " "
              << ressource->getAuteur() << " "
