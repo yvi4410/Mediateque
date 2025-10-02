@@ -82,6 +82,7 @@ Application de gestion d'une médiathèque permettant de gérer différents type
 - `showborrow` : Voir ses emprunts
 - `load/save` : Gestion des fichiers
 - `delete/reset` : Gestion des ressources (admin)
+- `bye` : Quitter l'application
 
 ### Gestion des Données
 - Sauvegarde/Chargement dans des fichiers
