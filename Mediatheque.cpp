@@ -47,10 +47,6 @@ void Mediatheque::showCommands() const {
 void Mediatheque::dispatch() {
     std::string line;
     showCommands(); 
-    // Assurer un utilisateur par défaut pour éviter de vérifier currentUser partout
-    if (!currentUser) {
-        setCurrentUser(std::make_unique<Client>());
-    }
 
     while (true) {
         std::cout << "\n> ";
@@ -97,14 +93,16 @@ void Mediatheque::dispatch() {
             showCommands();
 
         } else if (cmd == "load") {
-            // Chargement accessible (implémentation dans Mediatheque)
+            // Chargement accessible (implémentation dans Medue)
             loadFromFile(arg);
             showCommands();
 
         } else if (cmd == "save") {
-            currentUser->save(arg);
-            if (dynamic_cast<Administrateur*>(currentUser.get())) {
+            if (auto admin = dynamic_cast<Administrateur*>(currentUser.get())) {
+                admin->save(arg);
                 saveToFile(arg);
+            } else {
+                std::cout << "[Erreur] Vous n'avez pas le droit de sauvegarder.\n";
             }
             showCommands();
 
@@ -114,39 +112,53 @@ void Mediatheque::dispatch() {
 
         } else if (cmd == "delete") {
             int id = arg.empty() ? -1 : std::stoi(arg);
-            currentUser->deleteById(id);
-            if (dynamic_cast<Administrateur*>(currentUser.get())) {
+            if (auto admin = dynamic_cast<Administrateur*>(currentUser.get())) {
+                admin->deleteById(id);
                 deleteRessource(id);
+            } else {
+                std::cout << "[Erreur] Vous n'avez pas le droit de supprimer.\n";
             }
             showCommands();
 
         } else if (cmd == "ajouterutilisateur") {
-            std::istringstream as(arg);
-            int id; std::string prenom, nom;
-            if (!(as >> id >> prenom >> nom)) {
-                std::cout << "Usage: ajouterUtilisateur <id> <prenom> <nom>\n";
+            if (auto admin = dynamic_cast<Administrateur*>(currentUser.get())) {
+                std::istringstream as(arg);
+                int id; std::string prenom, nom;
+                if (!(as >> id >> prenom >> nom)) {
+                    std::cout << "Usage: ajouterUtilisateur <id> <prenom> <nom>\n";
+                } else {
+                    Utilisateur u(id, prenom, nom);
+                    admin->ajouterUtilisateur(u);
+                }
             } else {
-                Utilisateur u(id, prenom, nom);
-                currentUser->ajouterUtilisateur(u);
+                std::cout << "[Erreur] Vous n'avez pas le droit d'ajouter un utilisateur.\n";
             }
             showCommands();
 
         } else if (cmd == "supprimerutilisateur") {
-            {
+            if (auto admin = dynamic_cast<Administrateur*>(currentUser.get())) {
                 int id = arg.empty() ? -1 : std::stoi(arg);
-                currentUser->supprimerUtilisateur(id);
+                admin->supprimerUtilisateur(id);
+            } else {
+                std::cout << "[Erreur] Vous n'avez pas le droit de supprimer un utilisateur.\n";
             }
             showCommands();
 
         } else if (cmd == "reset") {
-            currentUser->reset();
-            if (dynamic_cast<Administrateur*>(currentUser.get())) {
+            if (auto admin = dynamic_cast<Administrateur*>(currentUser.get())) {
+                admin->reset();
                 resetRessources();
+            } else {
+                std::cout << "[Erreur] Vous n'avez pas le droit de remettre à zéro.\n";
             }
             showCommands();
 
         } else if (cmd == "listerutilisateurs") {
-            currentUser->listerUtilisateurs();
+            if (auto admin = dynamic_cast<Administrateur*>(currentUser.get())) {
+                admin->listerUtilisateurs();
+            } else {
+                std::cout << "[Erreur] Vous n'avez pas le droit de lister les utilisateurs.\n";
+            }
             showCommands();
         } else {
             std::cout << "Commande inconnue.\n";
@@ -168,7 +180,7 @@ void Mediatheque::displayRessourceDetails(const Ressource* ressource) const {
     
     // Affichage des détails spécifiques selon le type
     std::string type = ressource->getType();
-    // utiliser le type tel quel (ex: "Livre", "CD")
+    std::transform(type.begin(), type.end(), type.begin(), ::tolower);
 
     if (type == "livre") {
         const Livre* livre = dynamic_cast<const Livre*>(ressource);
@@ -402,7 +414,7 @@ void Mediatheque::loadFromFile(const std::string& filename) {
         // On utilise le type tel quel dans le fichier (ex: "livre" ou "Livre")
         // Si nécessaire, le fichier doit contenir les types exacts correspondants.
         
-        if (type == "livre") {
+        if (type == "livre" or type == "Livre") {
             int id, annee, nbPages;
             std::string titre, auteur, etat, collection, resume;
             
@@ -411,7 +423,7 @@ void Mediatheque::loadFromFile(const std::string& filename) {
                 ressources.push_back(std::move(livre));
                 count++;
             }
-        } else if (type == "cd") {
+        } else if (type == "cd" or type == "CD") {
             int id, duree, nbPistes;
             std::string titre, auteur, etat, maison;
             
@@ -420,7 +432,7 @@ void Mediatheque::loadFromFile(const std::string& filename) {
                 ressources.push_back(std::move(cd));
                 count++;
             }
-        } else if (type == "revue") {
+        } else if (type == "revue" or type == "Revue") {
             int id, annee, nbPages, nbArticles;
             std::string titre, auteur, etat, collection, resume, editeur;
             
@@ -431,7 +443,7 @@ void Mediatheque::loadFromFile(const std::string& filename) {
                 ressources.push_back(std::move(revue));
                 count++;
             }
-        } else if (type == "dvd") {
+        } else if (type == "dvd" or type == "DVD") {
             int id, duree, nbChapitres;
             std::string titre, auteur, etat, maison;
             
@@ -440,7 +452,7 @@ void Mediatheque::loadFromFile(const std::string& filename) {
                 ressources.push_back(std::move(dvd));
                 count++;
             }
-        } else if (type == "vhs") {
+        } else if (type == "vhs" or type == "VHS") {
             int id, duree;
             std::string titre, auteur, etat, maison;
             

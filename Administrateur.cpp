@@ -128,10 +128,6 @@ void Administrateur::add(const std::string& type) {
     std::cout << "[Admin] Ressource ajoutée avec succès!\n";
 }
 
-void Administrateur::load(const std::string& filename) {
-    mediatheque->loadFromFile(filename);
-}
-
 void Administrateur::save(const std::string& filename) {
     mediatheque->saveToFile(filename);
 }
