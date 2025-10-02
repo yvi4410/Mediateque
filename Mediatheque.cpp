@@ -94,7 +94,7 @@ void Mediatheque::dispatch() {
             showCommands();
 
         } else if (cmd == "load") {
-            // Chargement accessible (implémentation dans Mediatheque)
+            // Chargement accessible (implémentation dans Medue)
             loadFromFile(arg);
             showCommands();
 
@@ -415,7 +415,7 @@ void Mediatheque::loadFromFile(const std::string& filename) {
         // On utilise le type tel quel dans le fichier (ex: "livre" ou "Livre")
         // Si nécessaire, le fichier doit contenir les types exacts correspondants.
         
-        if (type == "livre") {
+        if (type == "livre" or type == "Livre") {
             int id, annee, nbPages;
             std::string titre, auteur, etat, collection, resume;
             
@@ -424,7 +424,7 @@ void Mediatheque::loadFromFile(const std::string& filename) {
                 ressources.push_back(std::move(livre));
                 count++;
             }
-        } else if (type == "cd") {
+        } else if (type == "cd" or type == "CD") {
             int id, duree, nbPistes;
             std::string titre, auteur, etat, maison;
             
@@ -433,7 +433,7 @@ void Mediatheque::loadFromFile(const std::string& filename) {
                 ressources.push_back(std::move(cd));
                 count++;
             }
-        } else if (type == "revue") {
+        } else if (type == "revue" or type == "Revue") {
             int id, annee, nbPages, nbArticles;
             std::string titre, auteur, etat, collection, resume, editeur;
             
@@ -444,7 +444,7 @@ void Mediatheque::loadFromFile(const std::string& filename) {
                 ressources.push_back(std::move(revue));
                 count++;
             }
-        } else if (type == "dvd") {
+        } else if (type == "dvd" or type == "DVD") {
             int id, duree, nbChapitres;
             std::string titre, auteur, etat, maison;
             
@@ -453,7 +453,7 @@ void Mediatheque::loadFromFile(const std::string& filename) {
                 ressources.push_back(std::move(dvd));
                 count++;
             }
-        } else if (type == "vhs") {
+        } else if (type == "vhs" or type == "VHS") {
             int id, duree;
             std::string titre, auteur, etat, maison;
             
