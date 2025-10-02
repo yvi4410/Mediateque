@@ -5,7 +5,6 @@ class Administrateur : public Utilisateur {
 public:
     ~Administrateur() override = default;
 
-    // Spécifiques admin (diagramme)
     void add(const std::string& type) override;
     
     // Méthodes admin-only (non présentes dans Utilisateur)
